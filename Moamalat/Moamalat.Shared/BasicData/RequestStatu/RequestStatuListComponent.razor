@@ -1,0 +1,80 @@
+@inherits LocalizationComponent 
+@inject RequestStatuService _RequestStatuService
+@namespace Moamalat.Components.Basic
+<PageTitle>RequestStatu List</PageTitle>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>RequestStatu List</h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    @* <div class="panel-tag">
+
+                    </div> *@
+                    <!-- datatable start -->
+             
+                    <QuickGrid Class="table"
+                               ItemsProvider="DoFetchRequestStatu" Pagination="_paginationState">
+<PropertyColumn Title="StatusId" Property="w=>w.StatusId" />
+<PropertyColumn Title="StatusArName" Property="w=>w.StatusArName" />
+<PropertyColumn Title="StatusEnName" Property="w=>w.StatusEnName" />
+<TemplateColumn Context="requeststatu">
+
+                                   <a class="m-1 p-2" href="">
+                                    Edit
+                                </a>
+                                <a class="m-1 p-1">
+                                    Delete
+                                </a>
+                      </TemplateColumn>
+
+                    </QuickGrid>
+                    <Paginator State="@_paginationState" />                   <!-- datatable end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+ 
+ public PaginationState _paginationState { get; set; } = new PaginationState();
+ public PaginationResult<RequestStatu> Pagination { get; set; } = new PaginationResult<RequestStatu>()
+     {
+         PageSize = 10,
+         PageNumber = 1
+     };
+ GridItemsProvider<RequestStatu>? DoFetchRequestStatu;
+
+ protected override Task OnInitializedAsync()
+ {
+     DoFetchRequestStatu = async Req=>
+     {
+         await DoFetch();
+         return GridItemsProviderResult.From<RequestStatu>(items: Pagination.Items.ToList(), 
+                                             totalItemCount: Pagination.RecordsCount);
+     };
+     return base.OnInitializedAsync();
+ }
+ private async Task DoFetch()
+ {
+     if (Pagination == null)
+         Pagination = new PaginationResult<RequestStatu>() { PageSize = 10, PageNumber = 1, Items = new List<RequestStatu>() };
+     Pagination.PageNumber = _paginationState.CurrentPageIndex+1;
+     Pagination = await _RequestStatuService.GetPaged(Pagination);
+     if (Pagination?.Items == null)
+            Pagination.Items = Enumerable.Empty<RequestStatu>();
+
+
+     StateHasChanged();
+ }
+
+}

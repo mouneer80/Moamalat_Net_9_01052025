@@ -1,0 +1,76 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject RegionService _RegionService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="RegionData" OnValidSubmit="AddRegionData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="RegionId" class="form-label">RegionId:</label>
+                            <InputNumber id="RegionId" @bind-Value="RegionData.RegionId" class="form-control" />
+                            <ValidationMessage For="() => RegionData.RegionId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="RegionArName" class="form-label">RegionArName:</label>
+                            <InputText id="RegionArName" @bind-Value="RegionData.RegionArName" class="form-control" />
+                            <ValidationMessage For="() => RegionData.RegionArName" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="RegionEnName" class="form-label">RegionEnName:</label>
+                            <InputText id="RegionEnName" @bind-Value="RegionData.RegionEnName" class="form-control" />
+                            <ValidationMessage For="() => RegionData.RegionEnName" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public Region RegionData { get; set; }
+
+[Parameter]
+    public int RegionId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (RegionId> 0 )
+        {
+            RegionData = await _RegionService.GetRegionById(RegionId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        RegionData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddRegionData()
+    {
+        await _RegionService.AddRegion(RegionData);
+
+         _navigationManager.NavigateTo("/RegionListPage");
+    }
+}
+

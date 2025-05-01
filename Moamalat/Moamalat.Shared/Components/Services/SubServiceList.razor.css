@@ -1,0 +1,51 @@
+﻿input[type="search"] {
+    flex-grow: 1;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+}
+
+a:not([href]) {
+    color: #f9f9f9;
+    cursor: pointer;
+    font-family: system-ui;
+    font-weight: bold;
+}
+
+li i {
+    margin-right: 10px;
+    /*color: #fdd240;*/
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+.card li {
+    background-color: #ffffff80;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border-bottom: dashed 1px #ccc;
+}
+
+.attachmentContainer {
+    margin: 0 !important;
+    padding: 0;
+    border-radius: 10px;
+}
+
+.card > :last-child, .card-group > :last-child {
+    margin: 10px;
+}
+
+.margin-all {
+    margin: 20px;
+    background-color: #f8f7f7;
+    border: 2px solid #2b4c81;
+    border-radius: 15px;
+    font-family: system-ui;
+    font-weight: bold;
+}
+

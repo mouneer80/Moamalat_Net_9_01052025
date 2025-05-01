@@ -1,0 +1,55 @@
+@inherits EntityListComponentBase<ServiceRequiredDocument>
+
+@inject ServiceRequiredDocumentService _ServiceRequiredDocumentService
+@namespace Moamalat.Components.Basic
+<PageTitle>ServiceRequiredDocument List</PageTitle>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>ServiceRequiredDocument List</h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+
+                    <p>
+                        <a href="AddNewServiceRequiredDocumentPage">Create New</a>
+                    </p>
+                    <QuickGrid Class="table"
+                               ItemsProvider="DoFetchEntityPagedData" Pagination="_PaginationState">
+                        <PropertyColumn Title="RequiredDocumentId" Property="w=>w.RequiredDocumentId" />
+                        <PropertyColumn Title="ServiceId" Property="w=>w.ServiceId" />
+                        <PropertyColumn Title="DocumentTypeId" Property="w=>w.DocumentTypeId" />
+<TemplateColumn Context="servicerequireddocument">
+
+                                   <a class="m-1 p-2" href="">
+                                    Edit
+                                </a>
+                                <a class="m-1 p-1">
+                                    Delete
+                                </a>
+                      </TemplateColumn>
+
+                    </QuickGrid>
+                    <Paginator State="@_PaginationState" />                   <!-- datatable end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    protected override Task OnInitializedAsync()
+    {
+        SetService(_ServiceRequiredDocumentService);
+        
+        return base.OnInitializedAsync();
+    }
+}

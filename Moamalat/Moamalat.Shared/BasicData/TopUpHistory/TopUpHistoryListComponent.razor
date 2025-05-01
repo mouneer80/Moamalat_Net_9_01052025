@@ -1,0 +1,84 @@
+@inherits LocalizationComponent 
+@inject TopUpHistoryService _TopUpHistoryService
+@namespace Moamalat.Components.Basic
+<PageTitle>TopUpHistory List</PageTitle>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>TopUpHistory List</h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    @* <div class="panel-tag">
+
+                    </div> *@
+                    <!-- datatable start -->
+             
+                    <QuickGrid Class="table"
+                               ItemsProvider="DoFetchTopUpHistory" Pagination="_paginationState">
+<PropertyColumn Title="TopupId" Property="w=>w.TopupId" />
+<PropertyColumn Title="TopupDate" Property="w=>w.TopupDate" />
+<PropertyColumn Title="Amount" Property="w=>w.Amount" />
+<PropertyColumn Title="BalanceBefore" Property="w=>w.BalanceBefore" />
+<PropertyColumn Title="BalanceAfter" Property="w=>w.BalanceAfter" />
+<PropertyColumn Title="PersonId" Property="w=>w.PersonId" />
+<PropertyColumn Title="CorporateId" Property="w=>w.CorporateId" />
+<TemplateColumn Context="topuphistory">
+
+                                   <a class="m-1 p-2" href="">
+                                    Edit
+                                </a>
+                                <a class="m-1 p-1">
+                                    Delete
+                                </a>
+                      </TemplateColumn>
+
+                    </QuickGrid>
+                    <Paginator State="@_paginationState" />                   <!-- datatable end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+ 
+ public PaginationState _paginationState { get; set; } = new PaginationState();
+ public PaginationResult<TopUpHistory> Pagination { get; set; } = new PaginationResult<TopUpHistory>()
+     {
+         PageSize = 10,
+         PageNumber = 1
+     };
+ GridItemsProvider<TopUpHistory>? DoFetchTopUpHistory;
+
+ protected override Task OnInitializedAsync()
+ {
+     DoFetchTopUpHistory = async Req=>
+     {
+         await DoFetch();
+         return GridItemsProviderResult.From<TopUpHistory>(items: Pagination.Items.ToList(), 
+                                             totalItemCount: Pagination.RecordsCount);
+     };
+     return base.OnInitializedAsync();
+ }
+ private async Task DoFetch()
+ {
+     if (Pagination == null)
+         Pagination = new PaginationResult<TopUpHistory>() { PageSize = 10, PageNumber = 1, Items = new List<TopUpHistory>() };
+     Pagination.PageNumber = _paginationState.CurrentPageIndex+1;
+     Pagination = await _TopUpHistoryService.GetPaged(Pagination);
+     if (Pagination?.Items == null)
+            Pagination.Items = Enumerable.Empty<TopUpHistory>();
+
+
+     StateHasChanged();
+ }
+
+}

@@ -1,0 +1,84 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject DocumentService _DocumentService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="DocumentData" OnValidSubmit="AddDocumentData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="DocumentId" class="form-label">DocumentId:</label>
+                            <InputNumber id="DocumentId" @bind-Value="DocumentData.DocumentId" class="form-control" />
+                            <ValidationMessage For="() => DocumentData.DocumentId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="DocumentTypeId" class="form-label">DocumentTypeId:</label>
+                            <InputNumber id="DocumentTypeId" @bind-Value="DocumentData.DocumentTypeId" class="form-control" />
+                            <ValidationMessage For="() => DocumentData.DocumentTypeId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="PersonId" class="form-label">PersonId:</label>
+                            <InputNumber id="PersonId" @bind-Value="DocumentData.PersonId" class="form-control" />
+                            <ValidationMessage For="() => DocumentData.PersonId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="CorporateId" class="form-label">CorporateId:</label>
+                            <InputNumber id="CorporateId" @bind-Value="DocumentData.CorporateId" class="form-control" />
+                            <ValidationMessage For="() => DocumentData.CorporateId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="DocumentUrl" class="form-label">DocumentUrl:</label>
+                            <InputText id="DocumentUrl" @bind-Value="DocumentData.DocumentUrl" class="form-control" />
+                            <ValidationMessage For="() => DocumentData.DocumentUrl" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public Document DocumentData { get; set; }
+
+[Parameter]
+    public int DocumentId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (DocumentId> 0 )
+        {
+            DocumentData = await _DocumentService.GetDocumentById(DocumentId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        DocumentData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddDocumentData()
+    {
+        await _DocumentService.AddDocument(DocumentData);
+
+         _navigationManager.NavigateTo("/DocumentListPage");
+    }
+}
+

@@ -1,0 +1,79 @@
+@inherits LocalizationComponent
+@inject RegionService _RegionService
+@namespace Moamalat.Components.Basic
+<PageTitle>Region List</PageTitle>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>Region List</h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    @* <div class="panel-tag">
+
+                    </div> *@
+                    <!-- datatable start -->
+
+                    <QuickGrid Class="table" ItemsProvider="DoFetchRegion" Pagination="_paginationState">
+                        <PropertyColumn Title="RegionId" Property="w=>w.RegionId" />
+                        <PropertyColumn Title="RegionArName" Property="w=>w.RegionArName" />
+                        <PropertyColumn Title="RegionEnName" Property="w=>w.RegionEnName" />
+                        <TemplateColumn Context="region">
+
+                            <a class="m-1 p-2" href="">
+                                Edit
+                            </a>
+                            <a class="m-1 p-1">
+                                Delete
+                            </a>
+                        </TemplateColumn>
+
+                    </QuickGrid>
+                    <Paginator State="@_paginationState" />                   <!-- datatable end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public PaginationState _paginationState { get; set; } = new PaginationState();
+    public PaginationResult<Region> Pagination { get; set; } = new PaginationResult<Region>()
+        {
+            PageSize = 10,
+            PageNumber = 1
+        };
+    GridItemsProvider<Region>? DoFetchRegion;
+
+    protected override Task OnInitializedAsync()
+    {
+        DoFetchRegion = async Req =>
+        {
+            await DoFetch();
+            return GridItemsProviderResult.From<Region>(items: Pagination.Items.ToList(),
+                                                totalItemCount: Pagination.RecordsCount);
+        };
+        return base.OnInitializedAsync();
+    }
+    private async Task DoFetch()
+    {
+        if (Pagination == null)
+            Pagination = new PaginationResult<Region>() { PageSize = 10, PageNumber = 1, Items = new List<Region>() };
+        Pagination.PageNumber = _paginationState.CurrentPageIndex + 1;
+        Pagination = await _RegionService.GetPaged(Pagination);
+        if (Pagination?.Items == null)
+            Pagination.Items = Enumerable.Empty<Region>();
+
+
+        StateHasChanged();
+    }
+
+}

@@ -1,0 +1,79 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject ServiceParameterService _ServiceParameterService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="ServiceParameterData" OnValidSubmit="AddServiceParameterData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                                   <div class="mb-3">
+                            <label for="ServiceParameterId" class="form-label">ServiceParameterId:</label>
+                            <InputNumber id="ServiceParameterId" @bind-Value="ServiceParameterData.ServiceParameterId" class="form-control" />
+                            <ValidationMessage For="() => ServiceParameterData.ServiceParameterId" class="text-danger" />
+                        </div>                                   <div class="mb-3">
+                            <label for="ServiceId" class="form-label">ServiceId:</label>
+                            <InputNumber id="ServiceId" @bind-Value="ServiceParameterData.ServiceId" class="form-control" />
+                            <ValidationMessage For="() => ServiceParameterData.ServiceId" class="text-danger" />
+                        </div>                                   <div class="mb-3">
+                            <label for="ParameterId" class="form-label">ParameterId:</label>
+                            <InputNumber id="ParameterId" @bind-Value="ServiceParameterData.ParameterId" class="form-control" />
+                            <ValidationMessage For="() => ServiceParameterData.ParameterId" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+ 
+                    <div class="col-md-6">
+                        <a href="ServiceParameterListPage" class="btn btn-block btn-default">Cancel</a>
+                    </div>               </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public ServiceParameter ServiceParameterData { get; set; }
+
+[Parameter]
+    public int ServiceParameterId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ServiceParameterId> 0 )
+        {
+            ServiceParameterData = await _ServiceParameterService.GetServiceParameterById(ServiceParameterId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        ServiceParameterData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddServiceParameterData()
+    {
+        await _ServiceParameterService.AddServiceParameter(ServiceParameterData);
+
+         _navigationManager.NavigateTo("/ServiceParameterListPage");
+    }
+}
+

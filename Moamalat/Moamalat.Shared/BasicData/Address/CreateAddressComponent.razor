@@ -1,0 +1,96 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject AddressService _AddressService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="AddressData" OnValidSubmit="AddAddressData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="AddressId" class="form-label">AddressId:</label>
+                            <InputText id="AddressId" @bind-Value="AddressData.AddressId" class="form-control" />
+                            <ValidationMessage For="() => AddressData.AddressId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="PersonId" class="form-label">PersonId:</label>
+                            <InputNumber id="PersonId" @bind-Value="AddressData.PersonId" class="form-control" />
+                            <ValidationMessage For="() => AddressData.PersonId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="CorporateId" class="form-label">CorporateId:</label>
+                            <InputNumber id="CorporateId" @bind-Value="AddressData.CorporateId" class="form-control" />
+                            <ValidationMessage For="() => AddressData.CorporateId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="RegionId" class="form-label">RegionId:</label>
+                            <InputNumber id="RegionId" @bind-Value="AddressData.RegionId" class="form-control" />
+                            <ValidationMessage For="() => AddressData.RegionId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="WilayatId" class="form-label">WilayatId:</label>
+                            <InputNumber id="WilayatId" @bind-Value="AddressData.WilayatId" class="form-control" />
+                            <ValidationMessage For="() => AddressData.WilayatId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="AddressDescr" class="form-label">AddressDescr:</label>
+                            <InputText id="AddressDescr" @bind-Value="AddressData.AddressDescr" class="form-control" />
+                            <ValidationMessage For="() => AddressData.AddressDescr" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="PostalCode" class="form-label">PostalCode:</label>
+                            <InputText id="PostalCode" @bind-Value="AddressData.PostalCode" class="form-control" />
+                            <ValidationMessage For="() => AddressData.PostalCode" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="PostalBox" class="form-label">PostalBox:</label>
+                            <InputText id="PostalBox" @bind-Value="AddressData.PostalBox" class="form-control" />
+                            <ValidationMessage For="() => AddressData.PostalBox" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public Address AddressData { get; set; }
+
+[Parameter]
+    public string AddressId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!string.IsNullOrEmpty(AddressId) )
+        {
+            AddressData = await _AddressService.GetAddressById(AddressId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        AddressData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddAddressData()
+    {
+        await _AddressService.AddAddress(AddressData);
+
+         _navigationManager.NavigateTo("/AddressListPage");
+    }
+}
+

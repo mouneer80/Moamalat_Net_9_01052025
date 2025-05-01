@@ -1,0 +1,84 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject ParameterService _ParameterService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="ParameterData" OnValidSubmit="AddParameterData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="ParameterId" class="form-label">ParameterId:</label>
+                            <InputNumber id="ParameterId" @bind-Value="ParameterData.ParameterId" class="form-control" />
+                            <ValidationMessage For="() => ParameterData.ParameterId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="ParameterArName" class="form-label">ParameterArName:</label>
+                            <InputText id="ParameterArName" @bind-Value="ParameterData.ParameterArName" class="form-control" />
+                            <ValidationMessage For="() => ParameterData.ParameterArName" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="ParameterEnName" class="form-label">ParameterEnName:</label>
+                            <InputText id="ParameterEnName" @bind-Value="ParameterData.ParameterEnName" class="form-control" />
+                            <ValidationMessage For="() => ParameterData.ParameterEnName" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="DataTypeId" class="form-label">DataTypeId:</label>
+                            <InputNumber id="DataTypeId" @bind-Value="ParameterData.DataTypeId" class="form-control" />
+                            <ValidationMessage For="() => ParameterData.DataTypeId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="PLength" class="form-label">PLength:</label>
+                            <InputNumber id="PLength" @bind-Value="ParameterData.PLength" class="form-control" />
+                            <ValidationMessage For="() => ParameterData.PLength" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public Parameter ParameterData { get; set; }
+
+[Parameter]
+    public int ParameterId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ParameterId> 0 )
+        {
+            ParameterData = await _ParameterService.GetParameterById(ParameterId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        ParameterData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddParameterData()
+    {
+        await _ParameterService.AddParameter(ParameterData);
+
+         _navigationManager.NavigateTo("/ParameterListPage");
+    }
+}
+

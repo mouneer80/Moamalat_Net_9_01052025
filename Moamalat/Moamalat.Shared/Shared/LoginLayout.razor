@@ -1,0 +1,95 @@
+@namespace Moamalat.Components
+@inherits LayoutComponentBase
+<PageTitle>Moamalat - Login </PageTitle>
+<style>
+
+    .red {
+        /*        filter: invert(28%) sepia(91%) saturate(1333%) hue-rotate(341deg) brightness(101%) contrast(92%);*/
+       /*        filter: invert(63%) sepia(40%) saturate(770%) hue-rotate(323deg) brightness(98%) contrast(89%);*/
+    }
+
+    body {
+        /* background: rgb(99, 140, 187);
+                background: radial-gradient(circle, rgb(250, 251, 251) 54%, rgba(10, 3, 60, 0.97) 100%);
+                background-repeat: no-repeat;
+                background-size: cover;*/
+        padding: 0;
+        margin: 0;
+        height: 100vh;
+        width: 100vw;
+        min-height: 600px;
+        font-family: Arial, Helvetica, sans-serif;
+        /* display: flex;*/
+        align-items: center;
+        justify-content: center;
+    }
+
+    .Logincontainer {
+        background-color: white;
+        width: 380px;
+        margin: auto;
+        height: 500px;
+        border-radius: 25px;
+        box-shadow: 0 0 10px black;
+    }
+
+    .Logo {
+        position: relative;
+        font-size: 90px;
+        color: #e1cfcf;
+        /*padding: 19px;*/
+        background: rgb(99, 140, 187);
+        background: radial-gradient(circle, rgb(10, 51, 98) 54%, rgba(10, 3, 60, 0.97) 100%);
+        border-radius: 10px;
+        border-bottom-left-radius: 40px;
+        border-bottom-right-radius: 40px;
+        top: -60px;
+        left: calc(50% - 74px);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0px 0px 13px 0px rgb(32 63 115 / 8%);
+    }
+
+    .mof {
+        background: rgba(246, 249, 246, 0.918) !important;
+        left: 0 !important;
+        right: 1500 !important;
+        text-align: center;
+        height: 150px !important;
+        width: 100%;
+        border: 0;
+    }
+
+        .mof img {
+            vertical-align: middle;
+            max-height: 150px;
+            /*max-width: 160px;*/
+        }
+
+    card {
+        color: blueviolet;
+    }
+</style>
+<div class="bg">
+      <div class="container py-4 py-lg-5 my-lg-5 px-4 px-sm-0">
+        <CustomErrorBoundary @ref="errorBoundary">
+            <ChildContent>
+                @Body
+            </ChildContent>
+            <ErrorContent Context="_Exception">
+
+                <CustomErrorComponent _exception="_Exception" errorBoundary="errorBoundary" />
+
+            </ErrorContent>
+        </CustomErrorBoundary>
+    </div>
+
+
+    
+</div>
+
+@code
+{
+    public CustomErrorBoundary errorBoundary { get; set; } = new();
+}
+
+

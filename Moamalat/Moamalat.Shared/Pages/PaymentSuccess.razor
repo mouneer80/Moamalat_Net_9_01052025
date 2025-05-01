@@ -1,0 +1,59 @@
+﻿@page "/Payment-Success/{PaymentRequestId}"
+@inherits PageBaseComponent
+@layout InsidePageLayout
+@namespace Moamalat.Pages
+@using Moamalat.Services
+
+<h1>
+    Payment Result.....
+
+
+</h1>
+@if (PaymentResponseDetails != null)
+{
+    <h1>
+        @PaymentRequestId
+    </h1>
+
+    <p>Amount Recieved:</p>
+
+    @PaymentResponseDetails.OriginalPaymentRequest.Amount
+
+    <p>Session Id : </p>
+
+    @PaymentResponseDetails.Data.ClientReferenceId
+
+    <p>Payment Status:</p>
+
+    @PaymentResponseDetails.Data.PaymentStatus
+}
+@code {
+    [Parameter]
+    public string? PaymentRequestId { get; set; }
+
+    [Inject]
+    public PaymentRequestService? paymentRequestService { get; set; }
+    public PGResponse? PaymentResponseDetails { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(PaymentRequestId))
+        {
+            PaymentResponseDetails = await paymentRequestService.CheckPaymentRequest(Convert.ToInt32(PaymentRequestId));
+            if (PaymentResponseDetails != null)
+            {
+                // Handle the request as needed
+
+            }
+            else
+            {
+                // Handle the case where the payment request is not found
+                Console.WriteLine($"Payment request with ID {PaymentRequestId} not found.");
+            }
+
+
+        }
+
+        //return base.OnInitializedAsync();
+    }
+
+}

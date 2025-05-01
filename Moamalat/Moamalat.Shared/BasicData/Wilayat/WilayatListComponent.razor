@@ -1,0 +1,47 @@
+@inherits EntityListComponentBase<Wilayat>
+
+@inject WilayatService _WilayatService
+@namespace Moamalat.Components.Basic
+<PageTitle>Wilayat List</PageTitle>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>Wilayat List</h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+
+                    <p>
+                        <a href="AddNewWilayatPage">Create New</a>
+                    </p>
+                    <QuickGrid Class="table" ItemsProvider="DoFetchEntityPagedData" Pagination="_PaginationState">
+                        <PropertyColumn Title="WaliyatID" Property="w=>w.WilayatId" />
+                        <PropertyColumn Property="w => w.WilayatArName" />
+                        <PropertyColumn Property="w => w.WilayatEnName" />
+                        <PropertyColumn Property="w => w.RegionId" />
+                        <PropertyColumn Property="w => w.Region.RegionArName" />       
+                    </QuickGrid>
+                    <Paginator State="@_PaginationState" />
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    protected override Task OnInitializedAsync()
+    {
+        SetService(_WilayatService);
+
+        return base.OnInitializedAsync();
+    }
+}

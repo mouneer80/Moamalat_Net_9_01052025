@@ -1,0 +1,79 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject ServiceRequiredDocumentService _ServiceRequiredDocumentService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="ServiceRequiredDocumentData" OnValidSubmit="AddServiceRequiredDocumentData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                                   <div class="mb-3">
+                            <label for="RequiredDocumentId" class="form-label">RequiredDocumentId:</label>
+                            <InputNumber id="RequiredDocumentId" @bind-Value="ServiceRequiredDocumentData.RequiredDocumentId" class="form-control" />
+                            <ValidationMessage For="() => ServiceRequiredDocumentData.RequiredDocumentId" class="text-danger" />
+                        </div>                                   <div class="mb-3">
+                            <label for="ServiceId" class="form-label">ServiceId:</label>
+                            <InputNumber id="ServiceId" @bind-Value="ServiceRequiredDocumentData.ServiceId" class="form-control" />
+                            <ValidationMessage For="() => ServiceRequiredDocumentData.ServiceId" class="text-danger" />
+                        </div>                                   <div class="mb-3">
+                            <label for="DocumentTypeId" class="form-label">DocumentTypeId:</label>
+                            <InputNumber id="DocumentTypeId" @bind-Value="ServiceRequiredDocumentData.DocumentTypeId" class="form-control" />
+                            <ValidationMessage For="() => ServiceRequiredDocumentData.DocumentTypeId" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+ 
+                    <div class="col-md-6">
+                        <a href="ServiceRequiredDocumentListPage" class="btn btn-block btn-default">Cancel</a>
+                    </div>               </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public ServiceRequiredDocument ServiceRequiredDocumentData { get; set; }
+
+[Parameter]
+    public int RequiredDocumentId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (RequiredDocumentId> 0 )
+        {
+            ServiceRequiredDocumentData = await _ServiceRequiredDocumentService.GetServiceRequiredDocumentById(RequiredDocumentId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        ServiceRequiredDocumentData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddServiceRequiredDocumentData()
+    {
+        await _ServiceRequiredDocumentService.AddServiceRequiredDocument(ServiceRequiredDocumentData);
+
+         _navigationManager.NavigateTo("/ServiceRequiredDocumentListPage");
+    }
+}
+

@@ -1,0 +1,10 @@
+﻿@namespace Moamalat.Pages
+@page "/ServiceData/{ArgServiceData}"
+@layout InsidePageLayout
+
+<ServiceDataPageComponent ArgServiceData="@ArgServiceData" />
+
+@code {
+    [Parameter]
+    public string? ArgServiceData { get; set; }
+}

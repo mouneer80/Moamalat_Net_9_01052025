@@ -1,0 +1,141 @@
+﻿@namespace Moamalat.Components
+@inherits PageBaseComponent
+
+
+<div class="page-title">
+    <div class="title-content">
+        <div class="title-right icon-card">
+            <div class="p-3">
+                @if (PageParameters!=null)
+                {
+                    <span class="profile-image d-block m-auto" style="background-image:url('_content/Moamalat.Shared/img/svg/@PageParameters[3]'); background-size: cover;"></span>
+                }
+            </div>
+        </div>
+        <div class="title-left">
+            <div class="text-section text-center p-3 d-flex flex-column">
+                <span class="d-block text-truncate text-title fs-xs mt-1 loc">
+                    @_serviceName
+                </span>
+            </div>
+        </div>
+    </div> 
+</div>
+
+<DynamicComponent Parameters="StepParameters" Type="CurrentStep" />
+
+
+@code {
+    [Inject]
+    protected ServiceDataService _Service { get; set; }
+
+    [Parameter]
+    public string? ArgServiceData { get; set; }
+
+    //public string? ServiceId { get; set; }
+    public Dictionary<string, object> StepParameters { get; set; } = new Dictionary<string, object>();
+    protected Type? CurrentStep { get; set; }
+
+    private List<string> PageParameters { get; set; } = new();
+
+    public delegate Task OnEventDelegate(object EventArg);
+
+    private string? _serviceName { get; set; }
+
+    public List<ServiceParameter>? ServiceDataParameters { get; set; }
+
+    public List<ServiceRequiredDocument>? ServiceRequiredDocuments { get; set; }
+    RequestData requestData = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(ArgServiceData))
+        {
+            PageParameters = Utilities.DecodeEncryptedString(ArgServiceData).Split(',').ToList();
+
+            requestData.ServiceId = Convert.ToInt32(PageParameters[0]);
+
+            if (CurrentLanguage == "en")
+                _serviceName = PageParameters[2];
+            else
+                _serviceName = PageParameters[1];
+
+        }
+
+        CurrentStep = typeof(ServiceDataComponent);
+        await PrepareStepParameters();
+
+    }
+
+    private async Task PrepareStepParameters()
+    {
+        StepParameters = new();
+        if (CurrentStep == typeof(ServiceDataComponent))
+        {
+            StepParameters.Add("DataParameters", await _Service.GetServiceParameterByServiceId(Convert.ToInt32(PageParameters[0])));
+            OnEventDelegate OnServiceDataEntered = new OnEventDelegate(OnServiceDataEnteredValidated);
+            EventCallback<object> _event = new EventCallback<object>(null, OnServiceDataEntered);
+            StepParameters.Add("OnParametersEntered", _event);
+        }
+        else if (CurrentStep == typeof(ServiceDocumentsComponent))
+        {
+            StepParameters.Add("Documents", await _Service.GetSericeRequiredDocumentByServiceId(Convert.ToInt32(PageParameters[0])));
+            OnEventDelegate OnServiceDataEntered = new OnEventDelegate(OnAllDocumentsChosen);
+            EventCallback<object> _event = new EventCallback<object>(null, OnServiceDataEntered);
+            StepParameters.Add("OnAllDocumentsChosen", _event);
+
+        }
+        StateHasChanged();
+    }
+    private async Task  OnServiceDataEnteredValidated(object ServiceParametersData)
+    {
+        ServiceDataParameters = (List<ServiceParameter>)ServiceParametersData;
+
+        CurrentStep = typeof(ServiceDocumentsComponent);
+        await PrepareStepParameters();
+        StateHasChanged();
+    }
+
+    private async Task OnAllDocumentsChosen(object ServiceDocumentsData)
+    {
+        ServiceRequiredDocuments = (List<ServiceRequiredDocument>)ServiceDocumentsData;
+        decimal creationdate = Convert.ToDecimal(DateTime.Now.ToString("yyyyMMddHHmmss"));
+        // Force Save Request Data
+        requestData.RequestDate = creationdate;
+        requestData.PersonId = Convert.ToInt32(await secureDataStoreService.GetAsync<string>("PersonId"));
+        requestData.StatusId = 1;
+        requestData.ServiceFees = 20;
+        requestData.Createdby = requestData.PersonId;
+
+        List<RequestDetail> requestDetails = new();
+        List<RequestDocument> requestDocuments = new();
+
+        for (int i = 0; i < ServiceDataParameters.Count; i++)
+        {
+            ServiceParameter parameter = ServiceDataParameters[i];
+            //parameter.ParameterValue=
+            requestDetails.Add(new RequestDetail
+                {
+                    ParameterId = parameter.ParameterId,
+                    ParameterValue = parameter.ParameterValue
+                });
+        }
+        for (int i = 0; i < ServiceRequiredDocuments.Count; i++)
+        {
+            ServiceRequiredDocument Doc = ServiceRequiredDocuments[i];
+            Document document = new()
+                {
+                    DocumentTypeId = Doc.DocumentTypeId,
+                    DocumentUrl = Doc.DocumentUrl
+                };
+            //parameter.ParameterValue=
+            requestDocuments.Add(new RequestDocument
+                {
+                    RequiredDocumentId = Doc.RequiredDocumentId,
+                    CreationDate = creationdate,
+                    Document=document
+                });
+        }
+        await _Service.SaveServiceRequest(requestData, requestDetails, requestDocuments);
+    }
+}

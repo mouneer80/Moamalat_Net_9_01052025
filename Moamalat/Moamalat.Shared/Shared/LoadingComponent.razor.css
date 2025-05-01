@@ -1,0 +1,52 @@
+﻿body {
+    background-color: #6CC4EE;
+}
+.SpinnerBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.1);
+    transition: opacity 0.2s;
+}
+.Spinner {
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%);
+    width: 80px;
+    height: 80px;
+    border-style: solid;
+    border: 5px solid black;
+    border-top-color: #6CC4EE;
+    border-width: 7px;
+    border-radius: 50%;
+    -webkit-animation: spin .8s linear infinite;
+    /* Lets make it go round */
+    animation: spin .8s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+

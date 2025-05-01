@@ -1,0 +1,83 @@
+@inherits LocalizationComponent 
+@inject RequestTransactionService _RequestTransactionService
+@namespace Moamalat.Components.Basic
+<PageTitle>RequestTransaction List</PageTitle>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>RequestTransaction List</h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    @* <div class="panel-tag">
+
+                    </div> *@
+                    <!-- datatable start -->
+             
+                    <QuickGrid Class="table"
+                               ItemsProvider="DoFetchRequestTransaction" Pagination="_paginationState">
+<PropertyColumn Title="TransactionId" Property="w=>w.TransactionId" />
+<PropertyColumn Title="RequestId" Property="w=>w.RequestId" />
+<PropertyColumn Title="TransactionDate" Property="w=>w.TransactionDate" />
+<PropertyColumn Title="StatusId" Property="w=>w.StatusId" />
+<PropertyColumn Title="CreatedBy" Property="w=>w.CreatedBy" />
+<PropertyColumn Title="Notes" Property="w=>w.Notes" />
+<TemplateColumn Context="requesttransaction">
+
+                                   <a class="m-1 p-2" href="">
+                                    Edit
+                                </a>
+                                <a class="m-1 p-1">
+                                    Delete
+                                </a>
+                      </TemplateColumn>
+
+                    </QuickGrid>
+                    <Paginator State="@_paginationState" />                   <!-- datatable end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+ 
+ public PaginationState _paginationState { get; set; } = new PaginationState();
+ public PaginationResult<RequestTransaction> Pagination { get; set; } = new PaginationResult<RequestTransaction>()
+     {
+         PageSize = 10,
+         PageNumber = 1
+     };
+ GridItemsProvider<RequestTransaction>? DoFetchRequestTransaction;
+
+ protected override Task OnInitializedAsync()
+ {
+     DoFetchRequestTransaction = async Req=>
+     {
+         await DoFetch();
+         return GridItemsProviderResult.From<RequestTransaction>(items: Pagination.Items.ToList(), 
+                                             totalItemCount: Pagination.RecordsCount);
+     };
+     return base.OnInitializedAsync();
+ }
+ private async Task DoFetch()
+ {
+     if (Pagination == null)
+         Pagination = new PaginationResult<RequestTransaction>() { PageSize = 10, PageNumber = 1, Items = new List<RequestTransaction>() };
+     Pagination.PageNumber = _paginationState.CurrentPageIndex+1;
+     Pagination = await _RequestTransactionService.GetPaged(Pagination);
+     if (Pagination?.Items == null)
+            Pagination.Items = Enumerable.Empty<RequestTransaction>();
+
+
+     StateHasChanged();
+ }
+
+}

@@ -1,0 +1,104 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject PersonService _PersonService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="PersonData" OnValidSubmit="AddPersonData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="PersonId" class="form-label">PersonId:</label>
+                            <InputNumber id="PersonId" @bind-Value="PersonData.PersonId" class="form-control" />
+                            <ValidationMessage For="() => PersonData.PersonId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="NationalId" class="form-label">NationalId:</label>
+                            <InputText id="NationalId" @bind-Value="PersonData.NationalId" class="form-control" />
+                            <ValidationMessage For="() => PersonData.NationalId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="FullArName" class="form-label">FullArName:</label>
+                            <InputText id="FullArName" @bind-Value="PersonData.FullArName" class="form-control" />
+                            <ValidationMessage For="() => PersonData.FullArName" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="FullEnName" class="form-label">FullEnName:</label>
+                            <InputText id="FullEnName" @bind-Value="PersonData.FullEnName" class="form-control" />
+                            <ValidationMessage For="() => PersonData.FullEnName" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="Dob" class="form-label">Dob:</label>
+                            <InputNumber id="Dob" @bind-Value="PersonData.Dob" class="form-control" />
+                            <ValidationMessage For="() => PersonData.Dob" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="GenderId" class="form-label">GenderId:</label>
+                            <InputText id="GenderId" @bind-Value="PersonData.GenderId" class="form-control" />
+                            <ValidationMessage For="() => PersonData.GenderId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="Mobile" class="form-label">Mobile:</label>
+                            <InputText id="Mobile" @bind-Value="PersonData.Mobile" class="form-control" />
+                            <ValidationMessage For="() => PersonData.Mobile" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="Email" class="form-label">Email:</label>
+                            <InputText id="Email" @bind-Value="PersonData.Email" class="form-control" />
+                            <ValidationMessage For="() => PersonData.Email" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="Password" class="form-label">Password:</label>
+                            <InputText id="Password" @bind-Value="PersonData.Password" class="form-control" />
+                            <ValidationMessage For="() => PersonData.Password" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="CurrentBalance" class="form-label">CurrentBalance:</label>
+                            <InputNumber id="CurrentBalance" @bind-Value="PersonData.CurrentBalance" class="form-control" />
+                            <ValidationMessage For="() => PersonData.CurrentBalance" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public Person PersonData { get; set; }
+
+[Parameter]
+    public int PersonId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (PersonId> 0 )
+        {
+            PersonData = await _PersonService.GetPersonById(PersonId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        PersonData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddPersonData()
+    {
+        await _PersonService.AddPerson(PersonData);
+
+         _navigationManager.NavigateTo("/PersonListPage");
+    }
+}
+

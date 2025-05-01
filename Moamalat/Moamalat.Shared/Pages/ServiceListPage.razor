@@ -1,0 +1,10 @@
+﻿@namespace Moamalat.Pages
+@page "/ServiceList/{CategoryIdPara}"
+@layout InsidePageLayout
+
+<SubServiceList ServiceCategory="@CategoryIdPara" />
+
+@code {
+    [Parameter]
+    public string? CategoryIdPara { get; set; }
+}

@@ -1,0 +1,92 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject TopUpHistoryService _TopUpHistoryService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="TopUpHistoryData" OnValidSubmit="AddTopUpHistoryData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="TopupId" class="form-label">TopupId:</label>
+                            <InputNumber id="TopupId" @bind-Value="TopUpHistoryData.TopupId" class="form-control" />
+                            <ValidationMessage For="() => TopUpHistoryData.TopupId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="TopupDate" class="form-label">TopupDate:</label>
+                            <InputNumber id="TopupDate" @bind-Value="TopUpHistoryData.TopupDate" class="form-control" />
+                            <ValidationMessage For="() => TopUpHistoryData.TopupDate" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="Amount" class="form-label">Amount:</label>
+                            <InputNumber id="Amount" @bind-Value="TopUpHistoryData.Amount" class="form-control" />
+                            <ValidationMessage For="() => TopUpHistoryData.Amount" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="BalanceBefore" class="form-label">BalanceBefore:</label>
+                            <InputNumber id="BalanceBefore" @bind-Value="TopUpHistoryData.BalanceBefore" class="form-control" />
+                            <ValidationMessage For="() => TopUpHistoryData.BalanceBefore" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="BalanceAfter" class="form-label">BalanceAfter:</label>
+                            <InputNumber id="BalanceAfter" @bind-Value="TopUpHistoryData.BalanceAfter" class="form-control" />
+                            <ValidationMessage For="() => TopUpHistoryData.BalanceAfter" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="PersonId" class="form-label">PersonId:</label>
+                            <InputNumber id="PersonId" @bind-Value="TopUpHistoryData.PersonId" class="form-control" />
+                            <ValidationMessage For="() => TopUpHistoryData.PersonId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="CorporateId" class="form-label">CorporateId:</label>
+                            <InputNumber id="CorporateId" @bind-Value="TopUpHistoryData.CorporateId" class="form-control" />
+                            <ValidationMessage For="() => TopUpHistoryData.CorporateId" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public TopUpHistory TopUpHistoryData { get; set; }
+
+[Parameter]
+    public int TopupId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (TopupId> 0 )
+        {
+            TopUpHistoryData = await _TopUpHistoryService.GetTopUpHistoryById(TopupId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        TopUpHistoryData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddTopUpHistoryData()
+    {
+        await _TopUpHistoryService.AddTopUpHistory(TopUpHistoryData);
+
+         _navigationManager.NavigateTo("/TopUpHistoryListPage");
+    }
+}
+

@@ -1,0 +1,92 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject RequestDocumentService _RequestDocumentService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="RequestDocumentData" OnValidSubmit="AddRequestDocumentData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="RequestDocumentId" class="form-label">RequestDocumentId:</label>
+                            <InputNumber id="RequestDocumentId" @bind-Value="RequestDocumentData.RequestDocumentId" class="form-control" />
+                            <ValidationMessage For="() => RequestDocumentData.RequestDocumentId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="RequestId" class="form-label">RequestId:</label>
+                            <InputNumber id="RequestId" @bind-Value="RequestDocumentData.RequestId" class="form-control" />
+                            <ValidationMessage For="() => RequestDocumentData.RequestId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="RequiredDocumentId" class="form-label">RequiredDocumentId:</label>
+                            <InputNumber id="RequiredDocumentId" @bind-Value="RequestDocumentData.RequiredDocumentId" class="form-control" />
+                            <ValidationMessage For="() => RequestDocumentData.RequiredDocumentId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="DocumentId" class="form-label">DocumentId:</label>
+                            <InputNumber id="DocumentId" @bind-Value="RequestDocumentData.DocumentId" class="form-control" />
+                            <ValidationMessage For="() => RequestDocumentData.DocumentId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="CreatedBy" class="form-label">CreatedBy:</label>
+                            <InputNumber id="CreatedBy" @bind-Value="RequestDocumentData.CreatedBy" class="form-control" />
+                            <ValidationMessage For="() => RequestDocumentData.CreatedBy" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="Status" class="form-label">Status:</label>
+                            <InputText id="Status" @bind-Value="RequestDocumentData.Status" class="form-control" />
+                            <ValidationMessage For="() => RequestDocumentData.Status" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="CreationDate" class="form-label">CreationDate:</label>
+                            <InputNumber id="CreationDate" @bind-Value="RequestDocumentData.CreationDate" class="form-control" />
+                            <ValidationMessage For="() => RequestDocumentData.CreationDate" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public RequestDocument RequestDocumentData { get; set; }
+
+[Parameter]
+    public int RequestDocumentId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (RequestDocumentId> 0 )
+        {
+            RequestDocumentData = await _RequestDocumentService.GetRequestDocumentById(RequestDocumentId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        RequestDocumentData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddRequestDocumentData()
+    {
+        await _RequestDocumentService.AddRequestDocument(RequestDocumentData);
+
+         _navigationManager.NavigateTo("/RequestDocumentListPage");
+    }
+}
+

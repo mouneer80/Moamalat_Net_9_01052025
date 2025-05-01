@@ -1,0 +1,67 @@
+﻿input[type="search"] {
+    flex-grow: 1;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #f8f7f7;
+    color: #faca03;
+    border: 2px solid #faca03;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 15px;
+    font-family: system-ui;
+    font-weight: bold;
+    margin: 20px;
+}
+
+    button i {
+        margin-right: 10px;
+    }
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+.attachmentItem {
+    background-color: white;
+    margin: 1px;
+    padding: 10px;
+    border-radius: 10px;
+    border: dashed 2px #ccc;
+    color: #2b4c81;
+    font-family: system-ui;
+    font-weight: bold;
+}
+
+    .attachmentItem input[type="file"] {
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+    }
+
+.attachmentItemContainer {
+    margin: 15px !important;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.card > :last-child, .card-group > :last-child {
+    margin: 0px;
+}
+
+.margin-all {
+    margin: 20px;
+    background-color: #f8f7f7;
+    border: 2px solid #2b4c81;
+    border-radius: 15px;
+    font-family: system-ui;
+    font-weight: bold;
+}

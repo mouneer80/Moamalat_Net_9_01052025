@@ -1,0 +1,76 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject PersonCorporateService _PersonCorporateService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="PersonCorporateData" OnValidSubmit="AddPersonCorporateData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="PersonCorporateId" class="form-label">PersonCorporateId:</label>
+                            <InputNumber id="PersonCorporateId" @bind-Value="PersonCorporateData.PersonCorporateId" class="form-control" />
+                            <ValidationMessage For="() => PersonCorporateData.PersonCorporateId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="PersonId" class="form-label">PersonId:</label>
+                            <InputNumber id="PersonId" @bind-Value="PersonCorporateData.PersonId" class="form-control" />
+                            <ValidationMessage For="() => PersonCorporateData.PersonId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="CorporateId" class="form-label">CorporateId:</label>
+                            <InputNumber id="CorporateId" @bind-Value="PersonCorporateData.CorporateId" class="form-control" />
+                            <ValidationMessage For="() => PersonCorporateData.CorporateId" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public PersonCorporate PersonCorporateData { get; set; }
+
+[Parameter]
+    public int PersonCorporateId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (PersonCorporateId> 0 )
+        {
+            PersonCorporateData = await _PersonCorporateService.GetPersonCorporateById(PersonCorporateId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        PersonCorporateData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddPersonCorporateData()
+    {
+        await _PersonCorporateService.AddPersonCorporate(PersonCorporateData);
+
+         _navigationManager.NavigateTo("/PersonCorporateListPage");
+    }
+}
+

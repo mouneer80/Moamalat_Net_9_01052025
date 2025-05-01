@@ -1,0 +1,31 @@
+.header {
+    background-color: #243f8e;
+}
+
+.header-btn {
+    /*color: #e6e6e6 !important;*/
+}
+
+/*body, html {
+    background-color: #ffffff !important;
+    color: #e6e6e6 !important;
+}*/
+.link-text-dark {
+    color: #243f8e !important;
+}
+.nav-menu li a {
+    color: #e6e6e6 !important;
+}
+
+.page-footer {
+    background: #002f9b !important;
+    color: #fccc00 !important;
+}
+
+.background {
+    display: none !important;
+}
+
+.label-color {
+    color: #002f9b !important;
+}

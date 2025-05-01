@@ -1,0 +1,76 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject DocumentTypeService _DocumentTypeService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="DocumentTypeData" OnValidSubmit="AddDocumentTypeData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="DocumentTypeId" class="form-label">DocumentTypeId:</label>
+                            <InputNumber id="DocumentTypeId" @bind-Value="DocumentTypeData.DocumentTypeId" class="form-control" />
+                            <ValidationMessage For="() => DocumentTypeData.DocumentTypeId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="DocumentTypeArName" class="form-label">DocumentTypeArName:</label>
+                            <InputText id="DocumentTypeArName" @bind-Value="DocumentTypeData.DocumentTypeArName" class="form-control" />
+                            <ValidationMessage For="() => DocumentTypeData.DocumentTypeArName" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="DocumentTypeEnName" class="form-label">DocumentTypeEnName:</label>
+                            <InputText id="DocumentTypeEnName" @bind-Value="DocumentTypeData.DocumentTypeEnName" class="form-control" />
+                            <ValidationMessage For="() => DocumentTypeData.DocumentTypeEnName" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public DocumentType DocumentTypeData { get; set; }
+
+[Parameter]
+    public int DocumentTypeId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (DocumentTypeId> 0 )
+        {
+            DocumentTypeData = await _DocumentTypeService.GetDocumentTypeById(DocumentTypeId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        DocumentTypeData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddDocumentTypeData()
+    {
+        await _DocumentTypeService.AddDocumentType(DocumentTypeData);
+
+         _navigationManager.NavigateTo("/DocumentTypeListPage");
+    }
+}
+

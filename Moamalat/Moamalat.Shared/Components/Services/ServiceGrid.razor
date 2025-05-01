@@ -1,0 +1,46 @@
+﻿@namespace Moamalat.Components
+@inherits LocalizationComponent
+@inject ServiceCategoryService _CategoryService
+<div class="card mb-g">
+    <div class="row row-grid no-gutters justify-content-center">
+        @foreach (var Category in Categories)
+        {
+            <a href="ServiceList/@(Utilities.EncodeEncryptedString($"{Category.ServiceCategoryId.ToString()},{Category.CategoryArName},{Category.CategoryEnName},{Category.Icon}"))" class="hover-highlight">
+                <div class="icon-margin">
+                    <div class="border-y">
+                        <div class="icon-card">
+                            <div class="text-center p-3 d-flex flex-column">
+                                <span class="profile-image profile-image-border d-block m-auto" style="background-image:url('_content/Moamalat.Shared/img/svg/@Category.Icon'); background-size: cover;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="icon-text">
+                        <div class="text-center p-3 d-flex flex-column">
+                            <span class="d-block fs-xs mt-1 loc">
+                                @if (CurrentLanguage == "ar")
+                                    @Category.CategoryArName
+                                else
+                                    @Category.CategoryEnName
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>
+
+
+
+
+@code {
+    public List<ServiceCategory> Categories { get; set; } = new List<ServiceCategory>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = (await _CategoryService.GetAllServiceCategories()).ToList();
+
+        //return base.OnInitializedAsync();
+    }
+
+}

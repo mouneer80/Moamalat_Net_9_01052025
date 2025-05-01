@@ -1,0 +1,82 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject ServiceCategoryService _ServiceCategoryService
+
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="ServiceCategoryData" OnValidSubmit="AddServiceCategoryData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="CategoryArName" class="form-label">CategoryArName:</label>
+                            <InputText id="CategoryArName" @bind-Value="ServiceCategoryData.CategoryArName" class="form-control" />
+                            <ValidationMessage For="() => ServiceCategoryData.CategoryArName" class="text-danger" />
+                        </div>                                   
+                        <div class="mb-3">
+                            <label for="CategoryEnName" class="form-label">CategoryEnName:</label>
+                            <InputText id="CategoryEnName" @bind-Value="ServiceCategoryData.CategoryEnName" class="form-control" />
+                            <ValidationMessage For="() => ServiceCategoryData.CategoryEnName" class="text-danger" />
+                        </div>                                   
+                        <div class="mb-3">
+                            <label for="Icon" class="form-label">Icon:</label>
+                            <InputFile id="Icon" @bind-Value="ServiceCategoryData.Icon" class="form-control" />
+                            <ValidationMessage For="() => ServiceCategoryData.Icon" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+
+                    <div class="col-md-6">
+                        <a href="ServiceCategoryListPage" class="btn btn-block btn-default">Cancel</a>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public ServiceCategory ServiceCategoryData { get; set; }
+
+    [Parameter]
+    public int ServiceCategoryId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ServiceCategoryId > 0)
+        {
+            ServiceCategoryData = await _ServiceCategoryService.GetServiceCategoryById(ServiceCategoryId);
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        ServiceCategoryData ??= new();
+    }
+    //return base.OnParametersSetAsync();
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddServiceCategoryData()
+    {
+        await _ServiceCategoryService.AddServiceCategory(ServiceCategoryData);
+
+        _navigationManager.NavigateTo("/ServiceCategoryListPage");
+    }
+}
+

@@ -1,0 +1,88 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject CorporateService _CorporateService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="CorporateData" OnValidSubmit="AddCorporateData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="CorporateId" class="form-label">CorporateId:</label>
+                            <InputNumber id="CorporateId" @bind-Value="CorporateData.CorporateId" class="form-control" />
+                            <ValidationMessage For="() => CorporateData.CorporateId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="LegalArName" class="form-label">LegalArName:</label>
+                            <InputText id="LegalArName" @bind-Value="CorporateData.LegalArName" class="form-control" />
+                            <ValidationMessage For="() => CorporateData.LegalArName" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="LegalEnName" class="form-label">LegalEnName:</label>
+                            <InputText id="LegalEnName" @bind-Value="CorporateData.LegalEnName" class="form-control" />
+                            <ValidationMessage For="() => CorporateData.LegalEnName" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="Crno" class="form-label">Crno:</label>
+                            <InputNumber id="Crno" @bind-Value="CorporateData.Crno" class="form-control" />
+                            <ValidationMessage For="() => CorporateData.Crno" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="GradeId" class="form-label">GradeId:</label>
+                            <InputNumber id="GradeId" @bind-Value="CorporateData.GradeId" class="form-control" />
+                            <ValidationMessage For="() => CorporateData.GradeId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="CurrentBalance" class="form-label">CurrentBalance:</label>
+                            <InputNumber id="CurrentBalance" @bind-Value="CorporateData.CurrentBalance" class="form-control" />
+                            <ValidationMessage For="() => CorporateData.CurrentBalance" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public Corporate CorporateData { get; set; }
+
+[Parameter]
+    public int CorporateId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (CorporateId> 0 )
+        {
+            CorporateData = await _CorporateService.GetCorporateById(CorporateId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        CorporateData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddCorporateData()
+    {
+        await _CorporateService.AddCorporate(CorporateData);
+
+         _navigationManager.NavigateTo("/CorporateListPage");
+    }
+}
+

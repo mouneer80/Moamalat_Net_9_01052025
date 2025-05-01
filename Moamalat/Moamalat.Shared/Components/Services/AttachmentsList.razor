@@ -1,0 +1,79 @@
+﻿@namespace Moamalat.Components
+
+@using System.IO
+@inject IJSRuntime JSRuntime
+
+<div class="search-bar">
+
+    <div class="icon-margin">
+        <div class="icon-text">
+            <div class="text-center p-3 d-flex flex-column">
+                <span class="d-block text-truncate text-muted fs-xs mt-1 text-arabic">اسم الخدمة</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div>
+    <div class="icon-margin">
+        <div class="icon-text">
+            <div class="text-center p-3 d-flex flex-column">
+                <span class="d-block text-truncate text-muted fs-xs mt-1 text-arabic">البيانات الواجب توافرها للخدمة</span>
+            </div>
+        </div>
+    </div>
+    @foreach (var attachment in attachments)
+    {
+        <div class="card attachmentItemContainer">
+            <div class="attachmentItem" @onclick="() => ShowFileInput(attachment.FileInput)">
+                @attachment.Name
+                <input type="file" @ref="attachment.FileInput" accept="image/*,application/pdf" style="display:none;" />
+                @if (attachment.PreviewUrl != null)
+                {
+                    <img src="@attachment.PreviewUrl" class="preview" />
+                }
+            </div>
+        </div>
+    }
+</div>
+<div>
+    <a class="btn btn-default">
+        التالي
+    </a>
+</div>
+@code {
+    private ElementReference upload;
+    private List<AttachmentModel> attachments = new List<AttachmentModel>
+    {
+        new AttachmentModel { Name = "موردة دوار السمر" },
+        new AttachmentModel { Name = "موردة تصريح العمل (انتباه، طلب ضري فقي وزارة العمل إذا لا يوجد)" },
+        new AttachmentModel { Name = "موردة شخصية" },
+        new AttachmentModel { Name = "التقرير الطبي او التقوع بعمل ضري" }
+    };
+
+    private void ShowFileInput(ElementReference fileInput)
+    {
+        JSRuntime.InvokeVoidAsync("interop.showFileInput", fileInput);
+    }
+
+    private async Task HandleFileChange(ChangeEventArgs e, AttachmentModel attachment = null)
+    {
+        var file = e.Value as IBrowserFile;
+        if (file != null)
+        {
+            var format = "image/png";
+            var resizedImage = await file.RequestImageFileAsync(format, 640, 480);
+            var buffer = new byte[resizedImage.Size];
+            await resizedImage.OpenReadStream().ReadAsync(buffer);
+            attachment.PreviewUrl = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+            StateHasChanged();
+        }
+    }
+
+    public class AttachmentModel
+    {
+        public string Name { get; set; }
+        public ElementReference FileInput { get; set; }
+        public string PreviewUrl { get; set; }
+    }
+}

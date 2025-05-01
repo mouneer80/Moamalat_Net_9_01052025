@@ -1,0 +1,21 @@
+@namespace Moamalat.Pages
+@inherits LocalizationComponent
+
+@page "/home1"
+
+<PageTitle>Home</PageTitle>
+
+
+<ServiceGrid/>
+
+<CommingSoon/>
+
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        await secureDataStoreService.SetAsync("PersonId", "1"); // Test Data Has To be in login page
+
+        //return base.OnInitializedAsync();
+    }
+}

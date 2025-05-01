@@ -1,0 +1,24 @@
+@namespace Moamalat.Pages
+@inherits LocalizationComponent
+@page "/ddd"
+@using Moamalat.Components
+
+<PageTitle>Home</PageTitle>
+
+
+<ServiceGrid/>
+
+<button class="btn btn-primary" onclick="">Payment Test</button>
+<CommingSoon/>
+
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        await secureDataStoreService.SetAsync("PersonId", "1"); // Test Data Has To be in login page
+
+        //return base.OnInitializedAsync();
+    }
+
+    
+}

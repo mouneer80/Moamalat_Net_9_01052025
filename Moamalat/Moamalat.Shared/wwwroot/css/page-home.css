@@ -1,0 +1,20 @@
+.header {
+    background-color: #243f8e;
+}
+
+.header-btn {
+    /*color: #002f9b !important;*/
+}
+
+/*body, html {
+    background-color: #ffffff !important;
+    color: #002f9b !important;
+}*/
+
+.nav-menu li a {
+    color: #e6e6e6 !important;
+}
+
+.background {
+    display: block !important;
+}

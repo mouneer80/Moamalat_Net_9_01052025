@@ -1,0 +1,157 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject ServiceDataService _ServiceDataService
+
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="ServiceDataData" OnValidSubmit="AddServiceDataData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    @*  <div class="col-md-12"> *@
+                    @*  <div class="mb-3">
+                    <label for="ServiceId" class="form-label">ServiceId:</label>
+                    <InputNumber id="ServiceId" @bind-Value="ServiceDataData.ServiceId" class="form-control" />
+                    <ValidationMessage For="() => ServiceDataData.ServiceId" class="text-danger" />
+                    </div>   *@
+                    <div class="col-md-12 mb-3">
+                        <label for="ServiceArName" class="form-label">Arabic Name</label>
+                        <InputText id="ServiceArName" @bind-Value="ServiceDataData.ServiceArName" class="form-control" />
+                        <ValidationMessage For="() => ServiceDataData.ServiceArName" class="text-danger" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="ServiceEnName" class="form-label">English Name</label>
+                        <InputText id="ServiceEnName" @bind-Value="ServiceDataData.ServiceEnName" class="form-control" />
+                        <ValidationMessage For="() => ServiceDataData.ServiceEnName" class="text-danger" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="DescriptionAr" class="form-label">Arabic Description</label>
+                        <InputText id="DescriptionAr" @bind-Value="ServiceDataData.DescriptionAr" class="form-control" />
+                        <ValidationMessage For="() => ServiceDataData.DescriptionAr" class="text-danger" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="DescriptionEn" class="form-label">English Description</label>
+                        <InputText id="DescriptionEn" @bind-Value="ServiceDataData.DescriptionEn" class="form-control" />
+                        <ValidationMessage For="() => ServiceDataData.DescriptionEn" class="text-danger" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label for="ServiceCategoryId" class="form-label">Service Category</label>
+                        <InputSelect class="form-control" @bind-Value="ServiceDataData.ServiceCategoryId">
+                            @foreach (var category in Categories)
+                            {
+                                <option value="@category.ServiceCategoryId">@category.CategoryEnName</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => ServiceDataData.ServiceCategoryId" class="text-danger" />
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <label for="SanadFees" class="form-label">Sanad Fees</label>
+                        <InputNumber id="SanadFees" @bind-Value="ServiceDataData.SanadFees" class="form-control" />
+                        <ValidationMessage For="() => ServiceDataData.SanadFees" class="text-danger" />
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <label for="ServiceFees" class="form-label">Service Fees</label>
+                        <InputNumber id="ServiceFees" @bind-Value="ServiceDataData.ServiceFees" class="form-control" />
+                        <ValidationMessage For="() => ServiceDataData.ServiceFees" class="text-danger" />
+                    </div>
+                    <div class="col-12">
+                        <label for="ServiceAttributes" class="form-label">Service Attributes</label>
+
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label>Attribute Name</label>
+                                    <select class="form-control" >
+                                        <option>Name</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="frame-wrap">
+                            <table class="table m-0">
+                                <thead class="thead-themed">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Username</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr >
+                                      <td colspan="4">No attributes</td> 
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    @* <div class="mb-3">
+                    <label for="Icon" class="form-label">Icon:</label>
+                    <InputText id="Icon" @bind-Value="ServiceDataData.Icon" class="form-control" />
+                    <ValidationMessage For="() => ServiceDataData.Icon" class="text-danger" />
+                    </div> *@
+
+                    @* </div> *@
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+
+                    <div class="col-md-6">
+                        <a href="ServiceDataListPage" class="btn btn-block btn-default">Cancel</a>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public ServiceData ServiceDataData { get; set; }
+
+    [Inject]
+    public ServiceCategoryService _ServiceCategory { get; set; }
+
+    private List<ServiceCategory> Categories { get; set; } = new();
+
+    [Parameter]
+    public int ServiceId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        Categories = (await _ServiceCategory.GetAllServiceCategories()).ToList();
+        if (ServiceId > 0)
+        {
+            ServiceDataData = await _ServiceDataService.GetServiceDataById(ServiceId);
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        ServiceDataData ??= new();
+    }
+    //return base.OnParametersSetAsync();
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddServiceDataData()
+    {
+        await _ServiceDataService.AddServiceData(ServiceDataData);
+
+        _navigationManager.NavigateTo("/ServiceDataListPage");
+    }
+}
+

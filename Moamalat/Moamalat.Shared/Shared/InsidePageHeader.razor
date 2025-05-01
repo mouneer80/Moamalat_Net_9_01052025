@@ -1,0 +1,160 @@
+@namespace Moamalat.Components
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+<style>
+    /* Left Header Styling (Name and Username) */
+    .left-header {
+        display: flex;
+        flex-direction: column;
+        margin-top:70px;
+    }
+
+        .left-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .left-header p {
+            font-size: 16px;
+            color: #f0f0f0;
+        }
+
+    /* Right Header Styling (Search Bar) */
+    .right-header {
+        display: flex;
+        align-items: center;
+        text-align:center;
+        margin:auto;
+    }
+
+    .search-bar {
+        position: relative;
+        width: 250px;
+    }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 40px 10px 20px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+
+    .search-button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: transparent;
+        border: none;
+        color: #F7C100;
+        font-size: 18px;
+        cursor: pointer;
+    }
+</style>
+<!-- BEGIN Page Header -->
+<header class="page-header" role="banner">
+    <!-- we need this logo when user switches to nav-function-top -->
+    <div class="page-logo">
+        <div class="d-flex flex-column align-items-center justify-content-center p-4">
+            <img src="_content/Moamalat.Shared/img/svg/Icons/moamalatLogo-yellow.svg" style="max-height:250px; height:50px; width:50px">
+        </div>
+    </div>
+
+    <!-- DOC: nav menu layout change shortcut -->
+    <div class="hidden-md-down dropdown-icon-menu position-relative">
+        <a class="header-btn btn js-waves-off" data-action="toggle" data-class="nav-function-hidden" title="Hide Navigation">
+            <i class="fa fa-bars"></i>
+        </a>
+        <div class="flex-column center">
+            <img src="_content/Moamalat.Shared/img/svg/Icons/moamalatLogo-yellow.svg">
+        </div>
+        <ul>
+            <li>
+                <a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-minify" title="Minify Navigation">
+                    <i class="ni ni-minify-nav"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="btn js-waves-off" data-action="toggle" data-class="nav-function-fixed" title="Lock Navigation">
+                    <i class="ni ni-lock-nav"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- DOC: mobile button appears during mobile width -->
+    <div class="hidden-lg-up">
+
+        <div class="form-container text-center">
+            <div class="header header-inside">
+                <button type="button" class="header-btn btn press-scale-down" @onclick="GoBack">
+                    <i class="fa fa-arrow-left"></i>
+                </button>
+                <div class="">
+                    <img class="right-pos" src="_content/Moamalat.Shared/img/svg/Icons/moamalatlogo-yb.svg" alt="Logo">
+                </div>
+                @* <h1 class="text-white">XiShi Coming</h1> *@
+                
+            </div>
+            
+        </div>
+        
+        @* <div class="flex-column center">
+        <button type="button" class="header-btn btn press-scale-down" data-action="toggle" data-class="mobile-nav-on">
+        <i class="fa fa-bars"></i>
+        </button>
+        </div>
+        <div class="flex-column center">
+
+        <img src="_content/Moamalat.Shared/img/svg/Icons/moamalatLogo-yellow.svg">
+        </div> *@
+    </div>
+    <div class="ml-auto d-flex">
+        <!-- app user menu -->
+        <div>
+            <div class="dropdown-menu dropdown-menu-animated dropdown-lg">
+                <div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">
+                    <div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
+                        <span class="mr-2">
+                            <img src="_content/Moamalat.Shared/img/svg/avatar.svg" style="width:50px;height:50px" class="rounded-circle profile-image" alt="SAMIR ALGHAZALY">
+                        </span>
+                        <div class="info-card-text">
+                            <div class="fs-lg text-truncate text-truncate-lg">SAMIR ALGHAZALY</div>
+                            <span class="text-truncate text-truncate-md opacity-80">salghazaly@mof.gov.om</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown-divider m-0"></div>
+                <div class="dropdown-multilevel dropdown-multilevel-left">
+                    <div class="dropdown-item">
+                        <span data-i18n="lblLanguages">
+                            English
+                        </span>
+                    </div>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item text-arabic">
+                            <label class="lang text-arabic">عربي</label>
+                        </a>
+                        <a class="dropdown-item">
+                            <label>English (US)</label>
+                        </a>
+                    </div>
+                </div>
+                <div class="dropdown-divider m-0"></div>
+                <button class="dropdown-item fw-500 pt-3 pb-3">
+                    <span data-i18n="Logoutbtn">Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+@code {
+    private void GoBack()
+    {
+        JS.InvokeVoidAsync("history.back");
+        //Navigation.NavigateTo("javascript:history.back()");
+    }
+}
+<!-- END Page Header -->

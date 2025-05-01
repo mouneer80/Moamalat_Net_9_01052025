@@ -1,0 +1,50 @@
+@namespace Moamalat.Components
+<style>
+    .page-footer {
+        padding: 0 !important;
+    }
+    /* Bottom Navigation Styling */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #2B4D93;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-around;
+        color: white;
+    }
+
+        .bottom-nav i {
+            font-size: 24px;
+            cursor: pointer;
+        }
+</style>
+<!-- this overlay is activated only when mobile menu is triggered -->
+<div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div> <!-- END Page Content -->
+<!-- BEGIN Page Footer -->
+
+<footer class="page-footer" role="contentinfo">
+    <div class="bottom-nav">
+        <a href="/"><i class="fas fa-home"></i></a>           
+        <a data-action="toggle" data-class="mobile-nav-on">
+            <i class="fas fa-bars"></i>
+        </a>   
+        @* <i class="fas fa-th-large"></i> *@
+        <i class="fas fa-star"></i>
+        <i class="fas fa-cog"></i>
+    </div>
+    <div class="d-flex align-items-center flex-1">
+
+        <strong class="mb-0">
+            <span class="fw-700 text-white">2023 © Moamalat Ver(1.0.1) by&nbsp;EBAA Software Solutions</span>
+        </strong>
+
+
+
+    </div>
+    <div>
+    </div>
+</footer>
+
+

@@ -1,0 +1,99 @@
+﻿@namespace Moamalat.Components
+@inject IJSRuntime _js
+
+<!-- BEGIN Left Aside -->
+<aside class="page-sidebar">
+    <!-- BEGIN PRIMARY NAVIGATION -->
+    <nav id="js-primary-nav" class="primary-nav" role="navigation">
+        <div class="nav-filter">
+            <div class="position-relative">
+                <input type="text" id="nav_filter_input" placeholder="Filter menu" class="form-control" tabindex="0">
+                <a onclick="return false;" class="btn-primary btn-search-close js-waves-off" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+        <ul id="js-nav-menu" class="nav-menu">
+            <li>
+                <NavLink href="My Requests" @onclick="(async)=>ToggleNaveMenu()">
+                    <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-list-check"></i>&nbsp;My Requests</span>
+                </NavLink>
+            </li>
+            <li>
+                <NavLink href='companies' @onclick="(async)=>ToggleNaveMenu()">
+                    <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-person"></i>&nbsp;My Profile</span>
+                </NavLink>
+            </li>
+            <li>
+                <NavLink href='customers' @onclick="(async)=>ToggleNaveMenu()">
+                    <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-headset"></i>&nbsp;Call Us</span>
+                </NavLink>
+            </li>
+            <li>
+                <NavLink href='companiesGrades' @onclick="(async)=>ToggleNaveMenu()">
+                    <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-wallet"></i>&nbsp;My Balance</span>
+                </NavLink>
+            </li>
+            <li>
+                <NavLink href='companiesGrades' @onclick="(async)=>ToggleNaveMenu()">
+                    <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-building"></i>&nbsp;My Company</span>
+                </NavLink>
+            </li>
+        </ul>
+
+        <div class="filter-message js-filter-message bg-success-600"></div>
+    </nav>
+    <!-- END PRIMARY NAVIGATION -->
+    <!-- NAV FOOTER -->
+    <div class="nav-footer shadow-top">
+        <div class="nav-footer-image">
+            <img src="_content/Moamalat.Shared/img/svg/Icons/moamalatLogo-yellow.svg">
+        </div>
+        <ul>
+            <li>
+                Version (1.0.1)
+            </li>
+            <li>
+                <a href="javascript:void(0);">
+                    <i class="fa fa-user"></i>&nbsp; Raid Alrawahi
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);">
+                    <i class="fa fa-envelope"></i>&nbsp; raidalrawahi@gmail.com
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0);">
+                    <i class="fa fa-phone"></i>&nbsp; 96897665597
+                </a>
+            </li>
+        </ul>
+        <br />
+        <div class="col-sm-12">
+            <a href="#" class="btn btn-default">Arabic</a>
+            <a href="#" class="btn btn-success">English</a>
+            <a href="javascript:void(0);" class="btn btn-danger">
+                <i class="fa fa-sign-out"></i>
+            </a>
+        </div>
+    </div> <!-- END NAV FOOTER -->
+</aside>
+
+
+@code {
+    // private bool Collapsed = true;
+
+    //private List<Menu> MenuList { get; set; } = new();
+    private async Task ToggleNaveMenu()
+    {
+
+        await _js.InvokeVoidAsync("CollapseMobileMenu");
+    }
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     MenuList = (await _Ds.GetAsync<List<Menu>>("Menu")).Value;
+
+    //     //return base.OnInitializedAsync();
+    // }
+}

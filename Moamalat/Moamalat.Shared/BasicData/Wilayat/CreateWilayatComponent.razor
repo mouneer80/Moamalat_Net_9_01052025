@@ -1,0 +1,80 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject WilayatService _WilayatService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="WilayatData" OnValidSubmit="AddWilayatData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="WilayatId" class="form-label">WilayatId:</label>
+                            <InputNumber id="WilayatId" @bind-Value="WilayatData.WilayatId" class="form-control" />
+                            <ValidationMessage For="() => WilayatData.WilayatId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="RegionId" class="form-label">RegionId:</label>
+                            <InputNumber id="RegionId" @bind-Value="WilayatData.RegionId" class="form-control" />
+                            <ValidationMessage For="() => WilayatData.RegionId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="WilayatArName" class="form-label">WilayatArName:</label>
+                            <InputText id="WilayatArName" @bind-Value="WilayatData.WilayatArName" class="form-control" />
+                            <ValidationMessage For="() => WilayatData.WilayatArName" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="WilayatEnName" class="form-label">WilayatEnName:</label>
+                            <InputText id="WilayatEnName" @bind-Value="WilayatData.WilayatEnName" class="form-control" />
+                            <ValidationMessage For="() => WilayatData.WilayatEnName" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public Wilayat WilayatData { get; set; }
+
+[Parameter]
+    public int WilayatId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (WilayatId> 0 )
+        {
+            WilayatData = await _WilayatService.GetWilayatById(WilayatId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        WilayatData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddWilayatData()
+    {
+        await _WilayatService.AddWilayat(WilayatData);
+
+         _navigationManager.NavigateTo("/WilayatListPage");
+    }
+}
+

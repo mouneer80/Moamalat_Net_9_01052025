@@ -1,0 +1,85 @@
+@inherits LocalizationComponent
+@inject AddressService _AddressService
+@namespace Moamalat.Components.Basic
+<PageTitle>Address List</PageTitle>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>Address List</h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    @* <div class="panel-tag">
+
+                    </div> *@
+                    <!-- datatable start -->
+
+                    <QuickGrid Class="table"
+                               ItemsProvider="DoFetchAddress" Pagination="_paginationState">
+                        <PropertyColumn Title="AddressId" Property="w=>w.AddressId" />
+                        <PropertyColumn Title="PersonId" Property="w=>w.PersonId" />
+                        <PropertyColumn Title="CorporateId" Property="w=>w.CorporateId" />
+                        <PropertyColumn Title="RegionId" Property="w=>w.RegionId" />
+                        <PropertyColumn Title="WilayatId" Property="w=>w.WilayatId" />
+                        <PropertyColumn Title="AddressDescr" Property="w=>w.AddressDescr" />
+                        <PropertyColumn Title="PostalCode" Property="w=>w.PostalCode" />
+                        <PropertyColumn Title="PostalBox" Property="w=>w.PostalBox" />
+                        <TemplateColumn Context="address">
+
+                            <a class="m-1 p-2" href="">
+                                Edit
+                            </a>
+                            <a class="m-1 p-1">
+                                Delete
+                            </a>
+                        </TemplateColumn>
+
+                    </QuickGrid>
+                    <Paginator State="@_paginationState" />                   <!-- datatable end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public PaginationState _paginationState { get; set; } = new PaginationState();
+    public PaginationResult<Address> Pagination { get; set; } = new PaginationResult<Address>()
+        {
+            PageSize = 10,
+            PageNumber = 1
+        };
+    GridItemsProvider<Address>? DoFetchAddress;
+
+    protected override Task OnInitializedAsync()
+    {
+        DoFetchAddress = async Req =>
+        {
+            await DoFetch();
+            return GridItemsProviderResult.From<Address>(items: Pagination.Items.ToList(),
+                                                totalItemCount: Pagination.RecordsCount);
+        };
+        return base.OnInitializedAsync();
+    }
+    private async Task DoFetch()
+    {
+        if (Pagination == null)
+            Pagination = new PaginationResult<Address>() { PageSize = 10, PageNumber = 1, Items = new List<Address>() };
+        Pagination.PageNumber = _paginationState.CurrentPageIndex + 1;
+        Pagination = await _AddressService.GetPaged(Pagination);
+        if (Pagination?.Items == null)
+            Pagination.Items = Enumerable.Empty<Address>();
+
+
+        StateHasChanged();
+    }
+
+}

@@ -1,0 +1,76 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject RequestStatuService _RequestStatuService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="RequestStatuData" OnValidSubmit="AddRequestStatuData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="StatusId" class="form-label">StatusId:</label>
+                            <InputNumber id="StatusId" @bind-Value="RequestStatuData.StatusId" class="form-control" />
+                            <ValidationMessage For="() => RequestStatuData.StatusId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="StatusArName" class="form-label">StatusArName:</label>
+                            <InputText id="StatusArName" @bind-Value="RequestStatuData.StatusArName" class="form-control" />
+                            <ValidationMessage For="() => RequestStatuData.StatusArName" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="StatusEnName" class="form-label">StatusEnName:</label>
+                            <InputText id="StatusEnName" @bind-Value="RequestStatuData.StatusEnName" class="form-control" />
+                            <ValidationMessage For="() => RequestStatuData.StatusEnName" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public RequestStatu RequestStatuData { get; set; }
+
+[Parameter]
+    public int StatusId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (StatusId> 0 )
+        {
+            RequestStatuData = await _RequestStatuService.GetRequestStatuById(StatusId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        RequestStatuData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddRequestStatuData()
+    {
+        await _RequestStatuService.AddRequestStatu(RequestStatuData);
+
+         _navigationManager.NavigateTo("/RequestStatuListPage");
+    }
+}
+

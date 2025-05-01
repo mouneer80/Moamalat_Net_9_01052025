@@ -1,0 +1,86 @@
+﻿@namespace Moamalat.Components
+@inherits LocalizationComponent
+
+@inject ServiceDataService _serviceDataLoader
+
+@* <div class="search-bar">
+    @if (CategoryArguments != null)
+    {
+        <div class="icon-margin">
+            <div class="icon-card">
+                <div class="text-center p-3 d-flex flex-column">
+                    <span class="profile-image d-block m-auto" style="background-image:url('_content/Moamalat.Shared/img/svg/@CategoryArguments[3]'); background-size: cover;"></span>
+                </div>
+            </div>
+            <div class="icon-text">
+                <div class="text-center p-3 d-flex flex-column icon-text-blue">
+                    <span class="d-block text-truncate loc text-muted fs-xs mt-1">
+                        @if (CurrentLanguage == "ar")
+                            @CategoryArguments[1]
+                        else
+                            @CategoryArguments[2]
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+</div> *@
+
+<div class="page-title">
+    @if (CategoryArguments != null)
+    {
+        <div class="title-content">
+            <div class="title-right icon-card">
+                <div class="p-3 d-flex flex-column">
+                    <span class="profile-image d-block m-auto" style="background-image:url('_content/Moamalat.Shared/img/svg/@CategoryArguments[3]'); background-size: cover;"></span>
+                </div>
+            </div>
+            <div class="title-left">
+                <div class="text-section text-center p-3 d-flex flex-column">
+                    <span class="d-block text-truncate loc text-title fs-xs mt-1">
+                        @if (CurrentLanguage == "ar")
+                            @CategoryArguments[1]
+                        else
+                            @CategoryArguments[2]
+
+                    </span>
+                </div>
+            </div>
+            
+        </div>
+    }
+</div>
+<ul class="card attachmentContainer">
+    @if (Services != null)
+        @foreach (var service in Services)
+        {
+            <li>
+                                                                                                  @*  Service Id                 Service Ar Name        Service Eng Name           Category Icon     *@
+                <a class="link-text-dark" href="/ServiceData/@Utilities.EncodeEncryptedString($"{service.ServiceId.ToString()},{service.ServiceArName},{service.ServiceEnName},{CategoryArguments[3]}")">
+                    <i class="fa fa-paperclip"></i>
+                    <span class="loc">
+                        @service.ServiceArName
+                    </span>
+                </a>
+            </li>
+        }
+</ul>
+@code {
+    [Parameter]
+    public string? ServiceCategory { get; set; }
+    //public ServiceCategory? ServiceCategoryData { get; set; }
+    private List<string> CategoryArguments { get; set; } //= new();
+    public List<ServiceData>? Services { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        CategoryArguments = Utilities.DecodeEncryptedString(ServiceCategory).Split(',').ToList();
+
+        Services = (await _serviceDataLoader.GetServicesByCategoryId(Convert.ToInt32(CategoryArguments[0]))).ToList();
+        // if (Services == null || Services.Count == 0)
+        //     ServiceCategoryData = await _ServiceCategoryLoader.GetServiceCategoryById(ServiceCategoryId);
+        // else
+        //     ServiceCategoryData = Services.First().ServiceCategory;
+
+        // return base.OnParametersSetAsync();
+    }
+}

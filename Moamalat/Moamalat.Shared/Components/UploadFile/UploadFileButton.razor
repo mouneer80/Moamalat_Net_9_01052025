@@ -1,0 +1,26 @@
+﻿@namespace Moamalat.Components
+@inherits LocalizationComponent
+
+<InputFile OnChange="OnInputFileChange" accept="image/png, image/gif, image/jpeg" hidden id="@(_UploadFileComponent.Id+"_Bttn")" multiple />
+<!-- our custom upload button -->
+<style>
+    .btn {
+        border-radius:10px;
+    }
+
+    .btn-outline-primary {
+        color: #002f87;
+        border-color: #002f87;
+    }
+</style>
+<div class="choose_file">
+    <label class="btn btn-outline-primary btn-block" for="@(_UploadFileComponent.Id+"_Bttn")">
+        <span data-i18n="Global.btnChooseFile" class="loc">
+            @Title
+        </span>
+    </label>
+</div>
+@code{
+    [Parameter]
+    public string? Title { get; set; }
+}

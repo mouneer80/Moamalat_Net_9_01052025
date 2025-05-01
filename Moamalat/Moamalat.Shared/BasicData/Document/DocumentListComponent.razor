@@ -1,0 +1,77 @@
+@inherits LocalizationComponent 
+@inject DocumentService _DocumentService
+@namespace Moamalat.Components.Basic
+<PageTitle>Document List</PageTitle>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>Document List</h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+             
+                    <QuickGrid Class="table"ItemsProvider="DoFetchDocument" Pagination="_paginationState">
+                        <PropertyColumn Title="DocumentId" Property="w=>w.DocumentId" />
+                        <PropertyColumn Title="DocumentTypeId" Property="w=>w.DocumentTypeId" />
+                        <PropertyColumn Title="PersonId" Property="w=>w.PersonId" />
+                        <PropertyColumn Title="CorporateId" Property="w=>w.CorporateId" />
+                        <PropertyColumn Title="DocumentUrl" Property="w=>w.DocumentUrl" />
+                        <TemplateColumn Context="document">
+
+                                   <a class="m-1 p-2" href="">
+                                    Edit
+                                </a>
+                                <a class="m-1 p-1">
+                                    Delete
+                                </a>
+                      </TemplateColumn>
+
+                    </QuickGrid>
+                    <Paginator State="@_paginationState" />                   <!-- datatable end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+ 
+ public PaginationState _paginationState { get; set; } = new PaginationState();
+ public PaginationResult<Document> Pagination { get; set; } = new PaginationResult<Document>()
+     {
+         PageSize = 10,
+         PageNumber = 1
+     };
+ GridItemsProvider<Document>? DoFetchDocument;
+
+ protected override Task OnInitializedAsync()
+ {
+     DoFetchDocument = async Req=>
+     {
+         await DoFetch();
+         return GridItemsProviderResult.From<Document>(items: Pagination.Items.ToList(), 
+                                             totalItemCount: Pagination.RecordsCount);
+     };
+     return base.OnInitializedAsync();
+ }
+ private async Task DoFetch()
+ {
+     if (Pagination == null)
+         Pagination = new PaginationResult<Document>() { PageSize = 10, PageNumber = 1, Items = new List<Document>() };
+     Pagination.PageNumber = _paginationState.CurrentPageIndex+1;
+     Pagination = await _DocumentService.GetPaged(Pagination);
+     if (Pagination?.Items == null)
+            Pagination.Items = Enumerable.Empty<Document>();
+
+
+     StateHasChanged();
+ }
+
+}

@@ -1,0 +1,82 @@
+@inherits LocalizationComponent 
+@inject ParameterService _ParameterService
+@namespace Moamalat.Components.Basic
+<PageTitle>Parameter List</PageTitle>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div id="panel-1" class="panel">
+            <div class="panel-hdr">
+                <h2>Parameter List</h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+                    @* <div class="panel-tag">
+
+                    </div> *@
+                    <!-- datatable start -->
+             
+                    <QuickGrid Class="table"
+                               ItemsProvider="DoFetchParameter" Pagination="_paginationState">
+<PropertyColumn Title="ParameterId" Property="w=>w.ParameterId" />
+<PropertyColumn Title="ParameterArName" Property="w=>w.ParameterArName" />
+<PropertyColumn Title="ParameterEnName" Property="w=>w.ParameterEnName" />
+<PropertyColumn Title="DataTypeId" Property="w=>w.DataTypeId" />
+<PropertyColumn Title="PLength" Property="w=>w.PLength" />
+<TemplateColumn Context="parameter">
+
+                                   <a class="m-1 p-2" href="">
+                                    Edit
+                                </a>
+                                <a class="m-1 p-1">
+                                    Delete
+                                </a>
+                      </TemplateColumn>
+
+                    </QuickGrid>
+                    <Paginator State="@_paginationState" />                   <!-- datatable end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+ 
+ public PaginationState _paginationState { get; set; } = new PaginationState();
+ public PaginationResult<Parameter> Pagination { get; set; } = new PaginationResult<Parameter>()
+     {
+         PageSize = 10,
+         PageNumber = 1
+     };
+ GridItemsProvider<Parameter>? DoFetchParameter;
+
+ protected override Task OnInitializedAsync()
+ {
+     DoFetchParameter = async Req=>
+     {
+         await DoFetch();
+         return GridItemsProviderResult.From<Parameter>(items: Pagination.Items.ToList(), 
+                                             totalItemCount: Pagination.RecordsCount);
+     };
+     return base.OnInitializedAsync();
+ }
+ private async Task DoFetch()
+ {
+     if (Pagination == null)
+         Pagination = new PaginationResult<Parameter>() { PageSize = 10, PageNumber = 1, Items = new List<Parameter>() };
+     Pagination.PageNumber = _paginationState.CurrentPageIndex+1;
+     Pagination = await _ParameterService.GetPaged(Pagination);
+     if (Pagination?.Items == null)
+            Pagination.Items = Enumerable.Empty<Parameter>();
+
+
+     StateHasChanged();
+ }
+
+}

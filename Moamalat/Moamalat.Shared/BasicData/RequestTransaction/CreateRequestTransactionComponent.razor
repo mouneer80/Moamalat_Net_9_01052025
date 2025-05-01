@@ -1,0 +1,88 @@
+@inherits LocalizationComponent
+@namespace Moamalat.Components.Basic
+@inject RequestTransactionService _RequestTransactionService
+   
+<div class="container">
+    <div class="card mb-2 border shadow-0">
+        <div class="card-header bg-white">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    <span class="h6 font-weight-bold text-uppercase">Validate Entered Data</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <EditForm method="post" Model="RequestTransactionData" OnValidSubmit="AddRequestTransactionData" FormName="create" Enhance>
+                <DataAnnotationsValidator />
+                @* <ValidationSummary class="text-danger" /> *@
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="TransactionId" class="form-label">TransactionId:</label>
+                            <InputNumber id="TransactionId" @bind-Value="RequestTransactionData.TransactionId" class="form-control" />
+                            <ValidationMessage For="() => RequestTransactionData.TransactionId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="RequestId" class="form-label">RequestId:</label>
+                            <InputNumber id="RequestId" @bind-Value="RequestTransactionData.RequestId" class="form-control" />
+                            <ValidationMessage For="() => RequestTransactionData.RequestId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="TransactionDate" class="form-label">TransactionDate:</label>
+                            <InputNumber id="TransactionDate" @bind-Value="RequestTransactionData.TransactionDate" class="form-control" />
+                            <ValidationMessage For="() => RequestTransactionData.TransactionDate" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="StatusId" class="form-label">StatusId:</label>
+                            <InputNumber id="StatusId" @bind-Value="RequestTransactionData.StatusId" class="form-control" />
+                            <ValidationMessage For="() => RequestTransactionData.StatusId" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="CreatedBy" class="form-label">CreatedBy:</label>
+                            <InputNumber id="CreatedBy" @bind-Value="RequestTransactionData.CreatedBy" class="form-control" />
+                            <ValidationMessage For="() => RequestTransactionData.CreatedBy" class="text-danger" />
+                        </div>                        <div class="mb-3">
+                            <label for="Notes" class="form-label">Notes:</label>
+                            <InputText id="Notes" @bind-Value="RequestTransactionData.Notes" class="form-control" />
+                            <ValidationMessage For="() => RequestTransactionData.Notes" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-block btn-primary">Create</button>
+                    </div>
+                </div>
+
+            </EditForm>
+
+        </div>
+    </div>
+
+</div>
+@code
+{
+    [SupplyParameterFromForm]
+    public RequestTransaction RequestTransactionData { get; set; }
+
+[Parameter]
+    public int TransactionId { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (TransactionId> 0 )
+        {
+            RequestTransactionData = await _RequestTransactionService.GetRequestTransactionById(TransactionId);
+        }
+ }
+
+    protected override void OnInitialized()
+    {
+        RequestTransactionData ??= new();
+    }
+        //return base.OnParametersSetAsync();
+   
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+    public async Task AddRequestTransactionData()
+    {
+        await _RequestTransactionService.AddRequestTransaction(RequestTransactionData);
+
+         _navigationManager.NavigateTo("/RequestTransactionListPage");
+    }
+}
+

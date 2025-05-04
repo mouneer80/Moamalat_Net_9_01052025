@@ -1,0 +1,28 @@
+﻿@page "/docTypes"
+@attribute [StreamRendering]
+
+<PageTitle>Documents Types</PageTitle>
+
+<div>
+    <a href='/addDocType' class="btn btn-primary">
+        <i class="fas fa-user-plus"></i>
+        Add Document Type
+    </a>
+</div>
+
+@if (DocTypesList == null)
+{
+    <p>Loading .........</p>
+}
+else
+{
+    <QuickGrid Items="DocTypesList" class="table table-striped">
+        <PropertyColumn Property="@(p => p.DocumentTypeId)" Title="Document Type ID" />
+        <PropertyColumn Property="@(p => p.DocumentTypeEnName)" Title="Document Type Name" />
+        <PropertyColumn Property="@(p => p.DocumentTypeArName)" Title="Document Type Name" />
+        <TemplateColumn Context="DocType">
+            <a href="@($"/addDocType/{DocType.DocumentTypeId}")" class="btn btn-warning">Edit</a>
+        </TemplateColumn>
+    </QuickGrid>
+}
+

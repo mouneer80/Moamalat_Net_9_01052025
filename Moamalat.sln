@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moamalat.Data", "Moamalat.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moamalat.Api", "Moamalat.Api\Moamalat.Api.csproj", "{1FED8F62-FD85-94C5-2B18-2FE7D824D6DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moamalat.AdminApp", "Moamalat\Moamalat.AdminApp\Moamalat.AdminApp.csproj", "{EFBDB888-F0B8-4988-BE9D-04FA96CD594B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{1FED8F62-FD85-94C5-2B18-2FE7D824D6DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FED8F62-FD85-94C5-2B18-2FE7D824D6DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FED8F62-FD85-94C5-2B18-2FE7D824D6DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFBDB888-F0B8-4988-BE9D-04FA96CD594B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFBDB888-F0B8-4988-BE9D-04FA96CD594B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFBDB888-F0B8-4988-BE9D-04FA96CD594B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFBDB888-F0B8-4988-BE9D-04FA96CD594B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

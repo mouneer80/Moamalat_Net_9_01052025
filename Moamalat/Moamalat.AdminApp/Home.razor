@@ -1,22 +1,20 @@
-@namespace Moamalat.Pages
+@namespace Moamalat.AdminApp
+@page "/admin"
+
 @inherits LocalizationComponent
-@page "/"
-@using Moamalat.Components
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Admin Home</PageTitle>
 
+<h1>Admin Dashboard</h1>
 
-<ServiceGrid/>
+<!-- Admin-specific components -->
+@* <Moamalat.Components.ServiceGrid /> *@
 
-
-
-@code{
+@code {
     protected override async Task OnInitializedAsync()
     {
-        await secureDataStoreService.SetAsync("PersonId", "1"); // Test Data Has To be in login page
-
-        //return base.OnInitializedAsync();
+        Console.WriteLine("Admin Home Initializing");
+        await secureDataStoreService.SetAsync("PersonId", "1");
+        //await base.OnInitializedAsync();
     }
-
-    
 }

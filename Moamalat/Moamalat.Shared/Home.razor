@@ -1,0 +1,41 @@
+@namespace Moamalat.Shared.Shared
+@inherits LocalizationComponent
+@inject PaymentRequestService _Payment
+@page "/"
+
+@inject IOpenExternalUrl _openExternalUrl
+<PageTitle>Home</PageTitle>
+
+
+<ServiceGrid />
+<input type="number" @bind-value="amount" class="form-control" />
+<button class="btn btn-primary" @onclick="TestPayment">Payment Test</button>
+<CommingSoon />
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await secureDataStoreService.SetAsync("PersonId", "1"); // Test Data Has To be in login page
+
+        //return base.OnInitializedAsync();
+    }
+    decimal amount = 0.5M;
+    private async Task TestPayment()
+    {
+       // _navigationManager.NavigateTo("/Payment-Success/1002");
+        PaymentRequest request = new PaymentRequest()
+            {
+                CompanyId = 1,
+                UserId = 1,
+                PStatus=0,
+                Amount = amount,
+                TrackId =Convert.ToDecimal(DateTime.Now.ToString($"yyyyMMddHHmmss{new Random().NextInt64(0000, 9999)}")),
+                CreateDate=Convert.ToDecimal(DateTime.Now.ToString($"yyyyMMddHHmmss")),
+                InvoiceId = Guid.NewGuid().ToString()
+            };
+        var result = await _Payment.InitiatePaymentRequest(request);
+        await _openExternalUrl.OpenUrlAsync(result.HostedPageUrl);
+        // Console.WriteLine(result);
+    }
+}

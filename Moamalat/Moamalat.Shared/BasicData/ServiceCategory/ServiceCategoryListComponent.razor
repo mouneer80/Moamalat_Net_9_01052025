@@ -1,11 +1,8 @@
 @inherits EntityListComponentBase<ServiceCategory>
-
 @inject ServiceCategoryService _ServiceCategoryService
 @namespace Moamalat.Components.Basic
 
-
 <PageTitle>ServiceCategory List</PageTitle>
-
 <div class="row">
     <div class="col-xl-12">
         <div id="panel-1" class="panel">
@@ -19,7 +16,6 @@
             </div>
             <div class="panel-container show">
                 <div class="panel-content">
-
                     <p>
                         <a href="CreateNewServiceCategory">Create New</a>
                     </p>
@@ -30,7 +26,6 @@
                         <PropertyColumn Title="CategoryEnName" Property="w=>w.CategoryEnName" />
                         <PropertyColumn Title="Icon" Property="w=>w.Icon" />
                         <TemplateColumn Context="servicecategory">
-
                             <a class="m-1 p-2" href="">
                                 Edit
                             </a>
@@ -38,9 +33,8 @@
                                 Delete
                             </a>
                         </TemplateColumn>
-
                     </QuickGrid>
-                    <Paginator State="@_PaginationState" />                   <!-- datatable end -->
+                    <Paginator State="@_PaginationState" />
                 </div>
             </div>
         </div>

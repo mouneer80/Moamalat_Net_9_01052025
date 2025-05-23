@@ -1,5 +1,3 @@
-using Moamalat.Components;
-using Moamalat.Services;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;

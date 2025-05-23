@@ -1,271 +1,87 @@
 @namespace Moamalat.Components
+@inject INavigationService NavService
 @inject IJSRuntime _js
 
-<!-- BEGIN Left Aside -->
- <form Enhance>
-   <aside class="page-sidebar">
-        
-        <div class="page-logo">
-            <a class="page-logo-link press-scale-down d-flex align-items-center position-relative" data-toggle="modal" data-target="#modal-shortcut">
-                <img src="_content/Moamalat.Shared/img/svg/Icons/moamalatLogo-yellow.svg" style="max-height:250px; height:50px; width:50px">
-                <span class="page-logo-text mr-1">Moamalat</span>
-                <span class="position-absolute text-white opacity-50 small pos-top pos-right mr-2 mt-n2"></span>
-                <i class="fa fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
-            </a>
-        </div>
-        <!-- BEGIN PRIMARY NAVIGATION -->
-        <nav id="js-primary-nav" class="primary-nav" role="navigation">
-            <div class="nav-filter">
-                <div class="position-relative">
-                    <input type="text" id="nav_filter_input" placeholder="Filter menu" class="form-control" tabindex="0">
-                    <a onclick="return false;" class="btn-primary btn-search-close js-waves-off" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar">
-                        <i class="fal fa-chevron-up"></i>
-                    </a>
-                </div>
+<aside class="page-sidebar">
+    <nav id="js-primary-nav" class="primary-nav" role="navigation">
+        <div class="nav-filter">
+            <div class="position-relative">
+                <input type="text" id="nav_filter_input" placeholder="Filter menu" class="form-control" tabindex="0">
+                <a onclick="return false;" class="btn-primary btn-search-close js-waves-off" data-action="toggle" data-class="list-filter-active" data-target=".page-sidebar">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
             </div>
-            @*   <a id="js-nav-menu-wrapper-left-btn" class="d-flex align-items-center justify-content-center width-4 btn mt-1 mb-1 mr-2 ml-1 p-0 fs-xxl text-primary waves-effect waves-themed"><i class="fal fa-angle-left"></i></a>
-            <div id="js-nav-menu-wrapper" class="nav-menu-wrapper d-flex flex-grow-1 width-0 overflow-hidden">
-            *@
-            <ul id="js-nav-menu" class="nav-menu">
-                @* <li>
-                <NavLink href="/" @onclick="(async)=>ToggleNaveMenu()">
-                <i class="fa-solid fa-home"></i>
-                <span class="nav-link-text" data-i18n="nav.ui_components_alerts">Home Page</span>
-                </NavLink>
-                </li> *@
-                @* <li>
-                    <NavLink href="requests" @onclick="(async)=>ToggleNaveMenu()">
-                        <i class="fa-solid fa-list"></i>
-                        <span class="nav-link-text" data-i18n="nav.ui_components_alerts">Requests</span>
-                    </NavLink>
-                </li> *@
-
-                @* <li>
-                <NavLink href="ServiceCategoryListPage" @onclick="(async)=>ToggleNaveMenu()">
-                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-xmarks-lines"></i>&nbsp;Services Categories</span>
-                </NavLink>
-                </li> *@
+        </div>
+        <ul id="js-nav-menu" class="nav-menu">
+            @foreach (var item in NavService.GetMenuItems().Where(x => x.ApplicationTypes.Contains(NavService.ApplicationType)))
+            {
                 <li>
-                    <NavLink href="employees" @onclick="(async)=>ToggleNaveMenu()">
-                        <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-headset"></i>&nbsp;Employees</span>
+                    <NavLink href="@item.Url" @onclick="ToggleNaveMenu">
+                        <span class="nav-link-text" data-i18n="nav.ui_components_accordions">
+                            <i class="@item.Icon"></i>&nbsp;@item.Text
+                        </span>
                     </NavLink>
                 </li>
-                <li>
-                    <a href="javascript:void(0);" title="Customers menu" data-filter-tags="Customers menu">
-                        <span class="nav-link-text" data-i18n="nav.utilities_menu_child"><i class="fa-solid fa-users"></i>&nbsp;Customers</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <NavLink href='customers' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-users"></i>&nbsp;Customers</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='addresses' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-location-dot"></i>&nbsp;Addresses</span>
-                            </NavLink>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" title="Corporates menu" data-filter-tags="Corporates menu">
-                        <span class="nav-link-text" data-i18n="nav.utilities_menu_child"><i class="fa-solid fa-landmark"></i>&nbsp;Corporates</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <NavLink href='companies' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-building"></i>&nbsp;Corporates</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='companiesGrades' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-business-time"></i>&nbsp;Grade</span>
-                            </NavLink>
-                        </li>
-                    </ul>
-                </li>
-                @* <li>
-                <NavLink href="login" @onclick="(async)=>ToggleNaveMenu()">
-                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-xmarks-lines"></i>&nbsp;login</span>
-                </NavLink>
-                </li> *@
-                
-                <li>
-                    <a href="javascript:void(0);" title="Documents menu" data-filter-tags="Documents menu">
-                        <span class="nav-link-text" data-i18n="nav.utilities_menu_child"><i class="fa-solid fa-folder-open"></i>&nbsp;Documents</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <NavLink href='documents' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-file-pdf"></i>&nbsp;Document</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='documentsTypes' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-file"></i>&nbsp;Document Types</span>
-                            </NavLink>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" title="Regions menu" data-filter-tags="Regions menu">
-                        <span class="nav-link-text" data-i18n="nav.utilities_menu_child"><i class="fa-solid fa-map-location"></i>&nbsp;Regions</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <NavLink href='regions' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-map"></i>&nbsp;Region</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='wilayat' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-city"></i>&nbsp;Wilayat</span>
-                            </NavLink>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" title="Payment menu" data-filter-tags="Payment menu">
-                        <span class="nav-link-text" data-i18n="nav.utilities_menu_child"><i class="fa-solid fa-sack-dollar"></i>&nbsp;Payments</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <NavLink href='payments' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-credit-card"></i>&nbsp;Payment Data</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='wallet' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-wallet"></i>&nbsp;Top Up History</span>
-                            </NavLink>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" title="Services menu" data-filter-tags="Services menu">
-                        <span class="nav-link-text" data-i18n="nav.utilities_menu_child"><i class="fa-solid fa-wrench"></i>&nbsp;Services</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <NavLink href='serviceCategories' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-list"></i>&nbsp;Service Categories</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='services' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-list-check"></i>&nbsp;Service Data</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='serviceParameters' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-pager"></i>&nbsp;Service Parameter</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='serviceRequiredDocuments' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-file"></i>&nbsp;Required Document</span>
-                            </NavLink>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" title="Requests menu" data-filter-tags="Requests menu">
-                        <span class="nav-link-text" data-i18n="nav.utilities_menu_child"><i class="fa-solid fa-bullhorn"></i>&nbsp;Requests</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <NavLink href='requests' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-list"></i>&nbsp;Request Data</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='requestDetails' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-info"></i>&nbsp;Request Details</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='requestDocuments' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-file"></i>&nbsp;Request Documents</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='requestStatus' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-bars-progress"></i>&nbsp;Request Status</span>
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink href='requestTransactions' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-list-check"></i>&nbsp;Request Transaction</span>
-                            </NavLink>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" title="Options menu" data-filter-tags="Options menu">
-                        <span class="nav-link-text" data-i18n="nav.utilities_menu_child"><i class="fa-solid fa-xmarks-lines"></i>&nbsp;Options</span>
-                    </a>
-                    <ul>
-                        <li>
-                            <NavLink href='parameters' @onclick="(async)=>ToggleNaveMenu()">
-                                <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-pager"></i>&nbsp;Parameter</span>
-                            </NavLink>
-                        </li>
-                        @* <li>
-                        <NavLink href='PersonListPage' @onclick="(async)=>ToggleNaveMenu()">
-                        <span class="nav-link-text" data-i18n="nav.ui_components_accordions"><i class="fa-solid fa-xmarks-lines"></i>&nbsp;Person</span>
-                        </NavLink>
-                        </li> *@
-                    </ul>
-                </li>
-            </ul>
-            @*  </div>
-            <a id="js-nav-menu-wrapper-right-btn" class="d-flex align-items-center justify-content-center width-4 btn mt-1 mb-1 mr-1 ml-2 p-0 fs-xxl text-primary waves-effect waves-themed"><i class="fal fa-angle-right"></i></a>
-            *@
+            }
+        </ul>
 
-            <div class="filter-message js-filter-message bg-success-600"></div>
-        </nav>
-        <!-- END PRIMARY NAVIGATION -->
-        <!-- NAV FOOTER -->
+        <div class="filter-message js-filter-message bg-success-600"></div>
+    </nav>
+
+    @* Footer section that can be conditionally shown *@
+    @if (NavService.ShowMobileFooter)
+    {
         <div class="nav-footer shadow-top">
-            <a data-action="toggle" data-class="nav-function-minify" class="hidden-md-down">
-                <i class="ni ni-chevron-right"></i>
-                <i class="ni ni-chevron-right"></i>
-            </a>
-            <ul class="list-table m-auto nav-footer-buttons">
+            <div class="nav-footer-image">
+                <img src="_content/Moamalat.Shared/img/svg/Icons/moamalatLogo-yellow.svg">
+            </div>
+            <ul>
                 <li>
-                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Chat logs">
-                        <i class="fal fa-comments"></i>
+                    <a href="javascript:void(0);">
+                        <i class="fa fa-user"></i>&nbsp; @UserName
                     </a>
                 </li>
-                <li>
-                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Support Chat">
-                        <i class="fal fa-life-ring"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Make a call">
-                        <i class="fal fa-phone"></i>
-                    </a>
-                </li>
+                @if (!string.IsNullOrEmpty(Email))
+                {
+                    <li>
+                        <a href="javascript:void(0);">
+                            <i class="fa fa-envelope"></i>&nbsp; @Email
+                        </a>
+                    </li>
+                }
+                @if (!string.IsNullOrEmpty(Phone))
+                {
+                    <li>
+                        <a href="javascript:void(0);">
+                            <i class="fa fa-phone"></i>&nbsp; @Phone
+                        </a>
+                    </li>
+                }
             </ul>
-        </div> <!-- END NAV FOOTER -->
-    </aside>
-
-</form>
+            <br />
+            <div class="col-sm-12">
+                <a href="#" class="btn btn-default">Arabic</a>
+                <a href="#" class="btn btn-success">English</a>
+                <a href="javascript:void(0);" class="btn btn-danger">
+                    <i class="fa fa-sign-out"></i>
+                </a>
+            </div>
+        </div>
+    }
+</aside>
 
 @code {
-    // private bool Collapsed = true;
+    [Parameter]
+    public string UserName { get; set; } = "User";
 
-    //private List<Menu> MenuList { get; set; } = new();
+    [Parameter]
+    public string Email { get; set; } = "";
+
+    [Parameter]
+    public string Phone { get; set; } = "";
+
     private async Task ToggleNaveMenu()
     {
-
         await _js.InvokeVoidAsync("CollapseMobileMenu");
     }
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     MenuList = (await _Ds.GetAsync<List<Menu>>("Menu")).Value;
-
-    //     //return base.OnInitializedAsync();
-    // }
 }

@@ -16,4 +16,15 @@ namespace Moamalat.Entities
         public bool Success { get; set; }
         public string? Error { get; set; }
     }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class EntityPluralNameAttribute : Attribute
+    {
+        public string PluralName { get; }
+
+        public EntityPluralNameAttribute(string pluralName)
+        {
+            PluralName = pluralName;
+        }
+    }
 }

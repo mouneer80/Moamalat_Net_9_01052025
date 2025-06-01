@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Moamalat.Entities;
 
+[EntityPluralName("ServiceCategories")]
 [Table("ServiceCategory")]
 public partial class ServiceCategory : IEntity
 {

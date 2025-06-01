@@ -1,20 +1,72 @@
-@namespace Moamalat.AdminApp
 @page "/admin"
 
 @inherits LocalizationComponent
+@namespace Moamalat.AdminApp
 
 <PageTitle>Admin Home</PageTitle>
 
 <h1>Admin Dashboard</h1>
 
-<!-- Admin-specific components -->
-@* <Moamalat.Components.ServiceGrid /> *@
+<div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fa fa-list"></i> Service Categories
+                </h5>
+                <p class="card-text">Manage service categories</p>
+                <a href="/serviceCategories" class="btn btn-primary btn-sm">
+                    <i class="fa fa-arrow-right"></i> Manage
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fa fa-wrench"></i> Services
+                </h5>
+                <p class="card-text">Manage services</p>
+                <a href="/services" class="btn btn-primary btn-sm">
+                    <i class="fa fa-arrow-right"></i> Manage
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fa fa-users"></i> Customers
+                </h5>
+                <p class="card-text">Manage customers</p>
+                <a href="/customers" class="btn btn-primary btn-sm">
+                    <i class="fa fa-arrow-right"></i> Manage
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="fa fa-bullhorn"></i> Requests
+                </h5>
+                <p class="card-text">Manage requests</p>
+                <a href="/requests" class="btn btn-primary btn-sm">
+                    <i class="fa fa-arrow-right"></i> Manage
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
     protected override async Task OnInitializedAsync()
     {
         Console.WriteLine("Admin Home Initializing");
         await secureDataStoreService.SetAsync("PersonId", "1");
-        //await base.OnInitializedAsync();
+        await base.OnInitializedAsync();
     }
 }

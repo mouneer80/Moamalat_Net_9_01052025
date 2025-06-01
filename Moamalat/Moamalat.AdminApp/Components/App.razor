@@ -4,35 +4,51 @@
 <html lang="en">
 
 <head>
+    <!-- Character encoding -->
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- Viewport and mobile optimization -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <!-- Base path for routing -->
     <base href="/" />
 
+    <!-- Page title -->
     <title>Moamalat</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="msapplication-tap-highlight" content="no">
-    <link rel="stylesheet" media="screen, print" href="_content/Moamalat.Shared/css/vendors.bundle.css">
-    <link rel="stylesheet" media="screen, print" href="_content/Moamalat.Shared/css/app.bundle-rtl.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="_content/Moamalat.Shared/img/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="_content/Moamalat.Shared/img/favicon/favicon-32x32.png">
-    <link rel="mask-icon" href="_content/Moamalat.Shared/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
-    <script src="https://kit.fontawesome.com/0220bce0d3.js" crossorigin="anonymous"></script>
+
+    <!-- Favicons and app icons -->
+    <link rel="apple-touch-icon" href="_content/Moamalat.Shared/img/favicon/apple-touch-icon.png" sizes="180x180" />
+    <link rel="icon" href="_content/Moamalat.Shared/img/favicon/favicon-32x32.png" sizes="32x32" type="image/png" />
+    <link rel="mask-icon" href="_content/Moamalat.Shared/img/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+
+    <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,700" />
+
+    <!-- Shared CSS -->
+    <link rel="stylesheet" media="screen, print" href="_content/Moamalat.Shared/css/vendors.bundle.css" />
+    <link rel="stylesheet" media="screen, print" href="_content/Moamalat.Shared/css/app.bundle.css" />
+    <link rel="stylesheet" media="screen, print" href="_content/Moamalat.Shared/css/themes/cust-theme-3.css" />
+    <link rel="stylesheet" media="screen, print" href="_content/Moamalat.Shared/css/site.css" />
+
+    <!-- Admin App specific styles -->
     <link rel="stylesheet" href="Moamalat.AdminApp.styles.css" />
-    <link rel="stylesheet" media="screen, print" href="_content/Moamalat.Shared/css/themes/cust-theme-3.css">
-    <link href="_content/Moamalat.Shared/css/site.css" rel="stylesheet" />
+
+    <!-- Icons & Scripts -->
+    <script src="https://kit.fontawesome.com/0220bce0d3.js" crossorigin="anonymous"></script>
+
     <HeadOutlet />
 </head>
 <body class="mod-bg-1 nav-function-top desktop chrome webkit pace-done blur ">
 
-        <Routes @rendermode="new InteractiveServerRenderMode(false)" />
+        <Moamalat.AdminApp.Components.Routes @rendermode="new InteractiveServerRenderMode(false)" />
     
     <script src="_content/Moamalat.Shared/js/Master.js"></script>
     <script src="_content/Moamalat.Shared/js/vendors.bundle.js"></script>
     <script src="_content/Moamalat.Shared/js/app.bundle.js"></script>
-    <script type="text/javascript" src="_content/Moamalat.Shared/js/i18n/i18n.js"></script>
+    <script src="_content/Moamalat.Shared/js/i18n/i18n.js" type="text/javascript"></script>
     <script src="_framework/blazor.web.js"></script>
 </body>
 

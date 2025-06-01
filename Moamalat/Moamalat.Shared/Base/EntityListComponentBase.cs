@@ -51,5 +51,17 @@ namespace Moamalat.Components
 
             StateHasChanged();
         }
+        protected async Task RefreshAsync()
+        {
+            // Reset to first page
+            await _PaginationState.SetCurrentPageIndexAsync(0);
+
+            // Force grid to refresh by calling DoFetch
+            await DoFetch();
+        }
+        protected async Task RefreshCurrentPageAsync()
+        {
+            await DoFetch();
+        }
     }
 }

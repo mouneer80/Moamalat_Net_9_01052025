@@ -32,11 +32,12 @@ namespace Moamalat.API.Controllers
         // GET: api/[controller]/GetpagedWilayats
         [HttpPost("GetPagedWilayats")]
         public async Task<ActionResult<ApiResponse>> GetPagedWilayats(ApiRequest apiRequest)
-        { 
-           PaginationResult<Wilayat> _Pagination = Deserialize<PaginationResult<Wilayat>>(Utilities.Decrypt(apiRequest.Content));
-          var Entity = await _wilayatRepository.GetPagedWilayats(_Pagination);
-          if (Entity == null)
-             throw new NotFoundException();
+        {
+
+            PaginationResult<Wilayat> _Pagination = Deserialize<PaginationResult<Wilayat>>(Utilities.Decrypt(apiRequest.Content));
+            var Entity = await _wilayatRepository.GetPagedWilayats(_Pagination);
+            if (Entity == null)
+                throw new NotFoundException();
             var Response=new ApiResponse();
             Response.Succeeded = true;
             Response.DataObject = Utilities.Encrypt(Serialize<PaginationResult<Wilayat>>(Entity));

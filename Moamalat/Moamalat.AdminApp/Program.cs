@@ -7,6 +7,7 @@ using Moamalat.AdminApp.Components;
 using Moamalat.AdminApp.Services;
 using Moamalat.Shared;
 using Moamalat.AdminApp;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,17 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+
+if (!File.Exists(Path.Combine(app.Environment.WebRootPath, "_content", "Moamalat.Shared")))
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(builder.Environment.ContentRootPath, "..", "Moamalat.Shared", "wwwroot")),
+        RequestPath = "/_content/Moamalat.Shared"
+    });
+}
+
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()

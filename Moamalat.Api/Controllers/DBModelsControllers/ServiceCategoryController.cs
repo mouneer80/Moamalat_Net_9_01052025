@@ -43,6 +43,20 @@ namespace Moamalat.API.Controllers
             return Ok(Serialize<ApiResponse>(Response));
         }
 
+        // GET: api/[controller]/GetpagedServiceCategorys
+        [HttpPost("GetPagedServiceCategorys")]
+        public async Task<ActionResult<ApiResponse>> GetPagedServiceCategorys(ApiRequest apiRequest)
+        {
+            PaginationResult<ServiceCategory> _Pagination = Deserialize<PaginationResult<ServiceCategory>>(Utilities.Decrypt(apiRequest.Content));
+            var Entity = await _servicecategoryRepository.GetPagedServiceCategories(_Pagination);
+            if (Entity == null)
+                throw new NotFoundException();
+            var Response = new ApiResponse();
+            Response.Succeeded = true;
+            Response.DataObject = Utilities.Encrypt(Serialize<PaginationResult<ServiceCategory>>(Entity));
+            return Ok(Serialize<ApiResponse>(Response));
+        }
+
         // POST: api/[controller]/GetServiceCategoryById
         [HttpPost("GetServiceCategoryById")]
         public async Task<ActionResult<ApiResponse>> GetServiceCategoryById(ApiRequest apiRequest)

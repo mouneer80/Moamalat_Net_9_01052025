@@ -1,41 +1,31 @@
 @inherits EntityListComponentBase<ServiceCategory>
-@inject ServiceCategoryService _ServiceCategoryService
+
+@inject ServiceCategoryService _serviceCategoryService
 @namespace Moamalat.Components.Basic
 
-<PageTitle>ServiceCategory List</PageTitle>
-<div class="row">
-    <div class="col-xl-12">
-        <div id="panel-1" class="panel">
-            <div class="panel-hdr">
-                <h2>ServiceCategory List</h2>
-                <div class="panel-toolbar">
-                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
-                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
-                    <button class="btn btn-panel waves-effect waves-themed" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
-                </div>
-            </div>
-            <div class="panel-container show">
-                <div class="panel-content">
-                    <p>
-                        <a href="CreateNewServiceCategory">Create New</a>
-                    </p>
-                    <QuickGrid Class="table"
-                               ItemsProvider="DoFetchEntityPagedData" Pagination="_PaginationState">
-                        <PropertyColumn Title="ServiceCategoryId" Property="w=>w.ServiceCategoryId" />
-                        <PropertyColumn Title="CategoryArName" Property="w=>w.CategoryArName" />
-                        <PropertyColumn Title="CategoryEnName" Property="w=>w.CategoryEnName" />
-                        <PropertyColumn Title="Icon" Property="w=>w.Icon" />
-                        <TemplateColumn Context="servicecategory">
-                            <a class="m-1 p-2" href="">
-                                Edit
-                            </a>
-                            <a class="m-1 p-1">
-                                Delete
-                            </a>
-                        </TemplateColumn>
-                    </QuickGrid>
-                    <Paginator State="@_PaginationState" />
-                </div>
+<PageTitle>Service Category List</PageTitle>
+
+<div class="panel-container show">
+    <div class="panel-content">
+        <button class="btn btn-primary" href="CreateNewServiceCategory">Create New</button>
+        <QuickGrid Class="table"
+                    ItemsProvider="DoFetchEntityPagedData" Pagination="_PaginationState">
+            <PropertyColumn Title="ServiceCategoryId" Property="w=>w.ServiceCategoryId" />
+            <PropertyColumn Title="CategoryArName" Property="w=>w.CategoryArName" />
+            <PropertyColumn Title="CategoryEnName" Property="w=>w.CategoryEnName" />
+            <PropertyColumn Title="Icon" Property="w=>w.Icon" />
+            <TemplateColumn Context="servicecategory">
+                <button class="btn btn-warning" href="">
+                    Edit
+                </button>
+                <button class="btn btn-danger">
+                    Delete
+                </button>
+            </TemplateColumn>
+        </QuickGrid>
+        <div class="row">
+            <div class="col-md-12">
+                <Paginator State="@_PaginationState" />
             </div>
         </div>
     </div>
@@ -45,8 +35,8 @@
 {
     protected override Task OnInitializedAsync()
     {
-        SetService(_ServiceCategoryService);
-        
+        SetService(_serviceCategoryService);
+
         return base.OnInitializedAsync();
     }
 }

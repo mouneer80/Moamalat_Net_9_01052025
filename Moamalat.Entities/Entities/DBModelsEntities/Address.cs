@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Moamalat.Entities;
 
+[EntityPluralName("Addresses")]
 [Table("Address")]
 public partial class Address : IEntity
 {

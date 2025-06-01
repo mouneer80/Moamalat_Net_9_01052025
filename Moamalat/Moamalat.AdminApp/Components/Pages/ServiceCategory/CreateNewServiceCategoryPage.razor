@@ -1,7 +1,13 @@
-@page "/addNewServiceCategory"
-@inherits PageBaseComponent
-@namespace Moamalat.Pages
+@page "/admin/addNewServiceCategory"
+@page "/admin/editServiceCategory/{ServiceCategoryId:int}"
+@inherits Moamalat.Components.PageBaseComponent
+@namespace Moamalat.AdminApp.Components.Pages.ServiceCategory
 
-<PageTitle>Add New ServiceCategory Page</PageTitle>
+<PageTitle>@(ServiceCategoryId > 0 ? "Edit" : "Add New") ServiceCategory Page</PageTitle>
 
-<CreateServiceCategoryComponent/>
+<Moamalat.Components.Basic.CreateServiceCategoryComponent ServiceCategoryId="@ServiceCategoryId" />
+
+@code {
+    [Parameter]
+    public int ServiceCategoryId { get; set; }
+}

@@ -1,6 +1,9 @@
 @inherits EntityListComponentBase<Wilayat>
 
 @inject WilayatService _WilayatService
+@inject RegionService _RegionService
+@inject NavigationManager NavigationManager
+
 @namespace Moamalat.Components.Basic
 <PageTitle>Wilayat List</PageTitle>
 
@@ -19,14 +22,37 @@
                 <div class="panel-content">
 
                     <p>
-                        <a href="AddNewWilayatPage">Create New</a>
+                        <a href="@GetCreateUrl()">Create New</a>
                     </p>
                     <QuickGrid Class="table" ItemsProvider="DoFetchEntityPagedData" Pagination="_PaginationState">
                         <PropertyColumn Title="WaliyatID" Property="w=>w.WilayatId" />
                         <PropertyColumn Property="w => w.WilayatArName" />
                         <PropertyColumn Property="w => w.WilayatEnName" />
-                        <PropertyColumn Property="w => w.RegionId" />
-                        <PropertyColumn Property="w => w.Region.RegionArName" />       
+                        <TemplateColumn Title="Region">
+                            <ChildContent Context="wilayat">
+                                @{
+                                    var regionName = GetRegionName(wilayat.RegionId);
+                                }
+                                @if (!string.IsNullOrEmpty(regionName))
+                                {
+                                    <span>@regionName</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Loading...</span>
+                                }
+                            </ChildContent>
+                        </TemplateColumn>
+                        <TemplateColumn Title="Actions">
+                            <ChildContent Context="wilayat">
+                                <a class="btn btn-sm btn-primary m-1" href="@GetEditUrl(wilayat.WilayatId)">
+                                    Edit
+                                </a>
+                                <button class="btn btn-sm btn-danger m-1" @onclick="() => DeleteWilayat(wilayat)">
+                                    Delete
+                                </button>
+                            </ChildContent>
+                        </TemplateColumn>
                     </QuickGrid>
                     <Paginator State="@_PaginationState" />
 
@@ -38,10 +64,84 @@
 
 @code
 {
-    protected override Task OnInitializedAsync()
+    private Dictionary<int, string> regionCache = new Dictionary<int, string>();
+    private bool regionsLoaded = false;
+
+    protected override async Task OnInitializedAsync()
     {
         SetService(_WilayatService);
 
-        return base.OnInitializedAsync();
+        // Load regions in parallel with base initialization
+        var loadRegionsTask = LoadRegions();
+        var baseInitTask = base.OnInitializedAsync();
+
+        await Task.WhenAll(loadRegionsTask, baseInitTask);
+    }
+
+    private async Task LoadRegions()
+    {
+        try
+        {
+            var regions = await _RegionService.GetAllRegions();
+            if (regions != null)
+            {
+                foreach (var region in regions)
+                {
+                    regionCache[region.RegionId] = $"{region.RegionArName} / {region.RegionEnName}";
+                }
+                regionsLoaded = true;
+
+                // Trigger UI update after regions are loaded
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading regions: {ex.Message}");
+        }
+    }
+
+    private string GetRegionName(int regionId)
+    {
+        if (regionCache.TryGetValue(regionId, out var regionName))
+        {
+            return regionName;
+        }
+
+        // If regions haven't loaded yet or region not found
+        return regionsLoaded ? $"Unknown Region (ID: {regionId})" : "Loading...";
+    }
+
+    private async Task DeleteWilayat(Wilayat wilayat)
+    {
+        // Add confirmation if needed
+        bool confirmed = true; // Replace with actual confirmation dialog
+
+        if (confirmed)
+        {
+            try
+            {
+                await _WilayatService.DeleteWilayat(wilayat);
+                await RefreshAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting wilayat: {ex.Message}");
+            }
+        }
+    }
+
+    private string GetCreateUrl()
+    {
+        var currentUrl = NavigationManager.Uri;
+        return currentUrl.Contains("/admin/") ? "/admin/AddNewWilayah" : "AddNewWilayah";
+    }
+
+    private string GetEditUrl(int id)
+    {
+        var currentUrl = NavigationManager.Uri;
+        return currentUrl.Contains("/admin/")
+            ? $"/admin/EditWilayat/{id}"
+            : $"EditWilayatPage/{id}";
     }
 }

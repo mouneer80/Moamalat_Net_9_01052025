@@ -1,6 +1,6 @@
 ﻿@namespace Moamalat.Components
 @inherits LocalizationComponent
-@inject ServiceCategoryService _CategoryService
+@inject ServiceCategoryService _categoryService
 <div class="card mb-g">
     <div class="row row-grid no-gutters justify-content-center">
         @foreach (var Category in Categories)
@@ -38,7 +38,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Categories = (await _CategoryService.GetAllServiceCategories()).ToList();
+        Categories = (await _categoryService.GetAllServiceCategories()).ToList();
 
         //return base.OnInitializedAsync();
     }

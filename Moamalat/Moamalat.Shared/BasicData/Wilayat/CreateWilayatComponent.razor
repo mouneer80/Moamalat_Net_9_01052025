@@ -18,11 +18,11 @@
                 @* <ValidationSummary class="text-danger" /> *@
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="mb-3">
+                        @* <div class="mb-3">
                             <label for="WilayatId" class="form-label">WilayatId:</label>
                             <InputNumber id="WilayatId" @bind-Value="WilayatData.WilayatId" class="form-control" />
                             <ValidationMessage For="() => WilayatData.WilayatId" class="text-danger" />
-                        </div>                        <div class="mb-3">
+                        </div>   *@                      <div class="mb-3">
                             <label for="RegionId" class="form-label">RegionId:</label>
                             <InputNumber id="RegionId" @bind-Value="WilayatData.RegionId" class="form-control" />
                             <ValidationMessage For="() => WilayatData.RegionId" class="text-danger" />
@@ -40,19 +40,16 @@
                         <button type="submit" class="btn btn-block btn-primary">Create</button>
                     </div>
                 </div>
-
             </EditForm>
-
         </div>
     </div>
-
 </div>
 @code
 {
     [SupplyParameterFromForm]
     public Wilayat WilayatData { get; set; }
 
-[Parameter]
+    [Parameter]
     public int WilayatId { get; set; }
     protected override async Task OnParametersSetAsync()
     {
@@ -60,21 +57,18 @@
         {
             WilayatData = await _WilayatService.GetWilayatById(WilayatId);
         }
- }
+    }
 
     protected override void OnInitialized()
     {
         WilayatData ??= new();
     }
-        //return base.OnParametersSetAsync();
-   
-    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
 
     public async Task AddWilayatData()
     {
         await _WilayatService.AddWilayat(WilayatData);
 
-         _navigationManager.NavigateTo("/WilayatListPage");
+         _navigationManager.NavigateTo("/wilayat");
     }
 }
 
